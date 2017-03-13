@@ -392,236 +392,251 @@ curl -O https://bootstrap.pypa.io/get-pip.py
 sudo python get-pip.py
 sudo pip install pyserial
 python LidarPrint2.py /dev/ttyUSB0
-``
-
-# OSX Support
-
-```
-➜  resources git:(master) ✗ ioreg -p IOUSB
-+-o Root  <class IORegistryEntry, id 0x100000100, retain 18>
-  +-o Root Hub Simulation Simulation@1a000000  <class AppleUSBRootHubDevice, id 0x1000002ab, registered, matched, active, busy 0 (448 ms), retain 15>
-  | +-o IOUSBHostDevice@1a100000  <class AppleUSBDevice, id 0x100011116, registered, matched, active, busy 0 (183 ms), retain 18>
-  |   +-o FaceTime HD Camera (Built-in)@1a110000  <class AppleUSBDevice, id 0x100011861, registered, matched, active, busy 0 (174 ms), retain 25>
-  +-o Root Hub Simulation Simulation@1d000000  <class AppleUSBRootHubDevice, id 0x1000002b2, registered, matched, active, busy 0 (439 ms), retain 12>
-  | +-o IOUSBHostDevice@1d100000  <class AppleUSBDevice, id 0x100011120, registered, matched, active, busy 0 (214 ms), retain 18>
-  |   +-o IOUSBHostDevice@1d180000  <class AppleUSBDevice, id 0x100011137, registered, matched, active, busy 0 (181 ms), retain 20>
-  |     +-o IR Receiver@1d182000  <class AppleUSBDevice, id 0x10001114a, registered, matched, active, busy 0 (340 ms), retain 17>
-  |     +-o Apple Internal Keyboard / Trackpad@1d183000  <class AppleUSBDevice, id 0x100011151, registered, matched, active, busy 0 (186 ms), retain 21>
-  |     +-o BRCM20702 Hub@1d181000  <class AppleUSBDevice, id 0x100011159, registered, matched, active, busy 0 (300 ms), retain 18>
-  |       +-o Bluetooth USB Host Controller@1d181300  <class AppleUSBDevice, id 0x10001117a, registered, matched, active, busy 0 (86186 ms), retain 23>
-  +-o Root Hub Simulation Simulation@14000000  <class AppleUSBRootHubDevice, id 0x1000002ce, registered, matched, active, busy 0 (437 ms), retain 12>
-    +-o CP2102 USB to UART Bridge Controller@14200000  <class AppleUSBDevice, id 0x10001833d, registered, matched, active, busy 0 (64 ms), retain 17>
-
-➜  resources git:(master) ✗ lsusb
-Bus 026 Device 001: ID 8087:0024 Intel Corporation Hub 
-Bus 026 Device 003: ID 05ac:8509 Apple Inc. FaceTime HD Camera (Built-in)  Serial: DJHDB101L6DH7FL0
-Bus 029 Device 001: ID 8087:0024 Intel Corporation Hub 
-Bus 029 Device 002: ID 0424:2513 SMSC Hub 
-Bus 029 Device 004: ID 05ac:0253 Apple Inc. Apple Internal Keyboard / Trackpad 
-Bus 029 Device 003: ID 05ac:8242 Apple Inc. IR Receiver 
-Bus 029 Device 005: ID 0a5c:4500 Broadcom Corp. BRCM20702 Hub 
-Bus 029 Device 007: ID 05ac:821d Apple Inc. Bluetooth USB Host Controller 
-Bus 020 Device 019: ID 10c4:ea60 Silicon Laboratories, Inc. CP2102 USB to UART Bridge Controller  Serial: 0001
-Bus 000 Device 001: ID 1d6b:IPCI Linux Foundation USB 2.0 Bus 
-Bus 000 Device 001: ID 1d6b:IPCI Linux Foundation USB 2.0 Bus 
-Bus 000 Device 001: ID 1d6b:IPPT Linux Foundation USB 3.0 Bus 
-
-
-CP2102 USB to UART Bridge Controller@14200000  <class AppleUSBDevice, id 0x10001833d, registered, matched, active, busy 0 (64 ms), retain 17>
-        {
-          "sessionID" = 1554243984798750
-          "iManufacturer" = 1
-          "bNumConfigurations" = 1
-          "idProduct" = 60000
-          "bcdDevice" = 256
-          "Bus Power Available" = 250
-          "USB Address" = 19
-          "bMaxPacketSize0" = 64
-          "iProduct" = 2
-          "iSerialNumber" = 3
-          "bDeviceClass" = 0
-          "Built-In" = No
-          "locationID" = 337641472
-          "bDeviceSubClass" = 0
-          "bcdUSB" = 272
-          "USB Product Name" = "CP2102 USB to UART Bridge Controller"
-          "PortNum" = 2
-          "non-removable" = "no"
-          "IOCFPlugInTypes" = {"9dc7b780-9ec0-11d4-a54f-000a27052861"="IOUSBFamily.kext/Contents/PlugIns/IOUSBLib.bundle"}
-          "bDeviceProtocol" = 0
-          "IOUserClientClass" = "IOUSBDeviceUserClientV2"
-          "IOPowerManagement" = {"DevicePowerState"=0,"CurrentPowerState"=3,"CapabilityFlags"=65536,"MaxPowerState"=4,"DriverPowerState"=3}
-          "Device Speed" = 1
-          "USB Vendor Name" = "Silicon Labs"
-          "idVendor" = 4292
-          "IOGeneralInterest" = "IOCommand is not serializable"
-          "USB Serial Number" = "0001"
-          "IOClassNameOverride" = "IOUSBDevice"
-        }
-system_profiler SPUSBDataType
-USB:
-
-    USB 2.0 Bus:
-
-      Host Controller Driver: AppleUSBEHCIPCI
-      PCI Device ID: 0x1e2d 
-      PCI Revision ID: 0x0004 
-      PCI Vendor ID: 0x8086 
-
-        Hub:
-
-          Product ID: 0x0024
-          Vendor ID: 0x8087  (Intel Corporation)
-          Version: 0.00
-          Speed: Up to 480 Mb/sec
-          Location ID: 0x1a100000 / 1
-          Current Available (mA): 500
-          Current Required (mA): 0
-          Extra Operating Current (mA): 0
-          Built-In: Yes
-
-            FaceTime HD Camera (Built-in):
-
-              Product ID: 0x8509
-              Vendor ID: 0x05ac  (Apple Inc.)
-              Version: 5.16
-              Serial Number: DJHDB101L6DH7FL0
-              Speed: Up to 480 Mb/sec
-              Manufacturer: Apple Inc.
-              Location ID: 0x1a110000 / 3
-              Current Available (mA): 500
-              Current Required (mA): 500
-              Extra Operating Current (mA): 0
-              Built-In: Yes
-
-    USB 2.0 Bus:
-
-      Host Controller Driver: AppleUSBEHCIPCI
-      PCI Device ID: 0x1e26 
-      PCI Revision ID: 0x0004 
-      PCI Vendor ID: 0x8086 
-
-        Hub:
-
-          Product ID: 0x0024
-          Vendor ID: 0x8087  (Intel Corporation)
-          Version: 0.00
-          Speed: Up to 480 Mb/sec
-          Location ID: 0x1d100000 / 1
-          Current Available (mA): 500
-          Current Required (mA): 0
-          Extra Operating Current (mA): 0
-          Built-In: Yes
-
-            Hub:
-
-              Product ID: 0x2513
-              Vendor ID: 0x0424  (SMSC)
-              Version: b.b3
-              Speed: Up to 480 Mb/sec
-              Location ID: 0x1d180000 / 2
-              Current Available (mA): 500
-              Current Required (mA): 2
-              Extra Operating Current (mA): 0
-              Built-In: Yes
-
-                Apple Internal Keyboard / Trackpad:
-
-                  Product ID: 0x0253
-                  Vendor ID: 0x05ac  (Apple Inc.)
-                  Version: 2.19
-                  Speed: Up to 12 Mb/sec
-                  Manufacturer: Apple Inc.
-                  Location ID: 0x1d183000 / 4
-                  Current Available (mA): 500
-                  Current Required (mA): 40
-                  Extra Operating Current (mA): 0
-                  Built-In: Yes
-
-                IR Receiver:
-
-                  Product ID: 0x8242
-                  Vendor ID: 0x05ac  (Apple Inc.)
-                  Version: 0.16
-                  Speed: Up to 1.5 Mb/sec
-                  Manufacturer: Apple Computer, Inc.
-                  Location ID: 0x1d182000 / 3
-                  Current Available (mA): 500
-                  Current Required (mA): 100
-                  Extra Operating Current (mA): 0
-                  Built-In: Yes
-
-                BRCM20702 Hub:
-
-                  Product ID: 0x4500
-                  Vendor ID: 0x0a5c  (Broadcom Corp.)
-                  Version: 1.00
-                  Speed: Up to 12 Mb/sec
-                  Manufacturer: Apple Inc.
-                  Location ID: 0x1d181000 / 5
-                  Current Available (mA): 500
-                  Current Required (mA): 94
-                  Extra Operating Current (mA): 0
-                  Built-In: Yes
-
-                    Bluetooth USB Host Controller:
-
-                      Product ID: 0x821d
-                      Vendor ID: 0x05ac  (Apple Inc.)
-                      Version: 1.54
-                      Speed: Up to 12 Mb/sec
-                      Manufacturer: Apple Inc.
-                      Location ID: 0x1d181300 / 7
-                      Current Available (mA): 500
-                      Current Required (mA): 0
-                      Extra Operating Current (mA): 0
-                      Built-In: Yes
-
-    USB 3.0 Bus:
-
-      Host Controller Driver: AppleUSBXHCIPPT
-      PCI Device ID: 0x1e31 
-      PCI Revision ID: 0x0004 
-      PCI Vendor ID: 0x8086 
-
-        CP2102 USB to UART Bridge Controller:
-
-          Product ID: 0xea60
-          Vendor ID: 0x10c4  (Silicon Laboratories, Inc.)
-          Version: 1.00
-          Serial Number: 0001
-          Speed: Up to 12 Mb/sec
-          Manufacturer: Silicon Labs
-          Location ID: 0x14200000 / 19
-          Current Available (mA): 500
-          Current Required (mA): 100
-          Extra Operating Current (mA): 0
-
-```
-
-```
-➜  bin ioreg -p IOUSB -l -b | grep -E "@|PortNum|USB Serial Number"
-  +-o Root Hub Simulation Simulation@1a000000  <class AppleUSBRootHubDevice, id 0x1000002ab, registered, matched, active, busy 0 (451 ms), retain 15>
-  | +-o IOUSBHostDevice@1a100000  <class AppleUSBDevice, id 0x100011116, registered, matched, active, busy 0 (187 ms), retain 18>
-  |   |   "PortNum" = 1
-  |   +-o FaceTime HD Camera (Built-in)@1a110000  <class AppleUSBDevice, id 0x100011861, registered, matched, active, busy 0 (176 ms), retain 25>
-  |         "PortNum" = 1
-  |         "USB Serial Number" = "DJHDB101L6DH7FL0"
-  +-o Root Hub Simulation Simulation@1d000000  <class AppleUSBRootHubDevice, id 0x1000002b2, registered, matched, active, busy 0 (443 ms), retain 12>
-  | +-o IOUSBHostDevice@1d100000  <class AppleUSBDevice, id 0x100011120, registered, matched, active, busy 0 (217 ms), retain 18>
-  |   |   "PortNum" = 1
-  |   +-o IOUSBHostDevice@1d180000  <class AppleUSBDevice, id 0x100011137, registered, matched, active, busy 0 (185 ms), retain 20>
-  |     |   "PortNum" = 8
-  |     +-o IR Receiver@1d182000  <class AppleUSBDevice, id 0x10001114a, registered, matched, active, busy 0 (343 ms), retain 17>
-  |     |     "PortNum" = 2
-  |     +-o Apple Internal Keyboard / Trackpad@1d183000  <class AppleUSBDevice, id 0x100011151, registered, matched, active, busy 0 (188 ms), retain 21>
-  |     |     "PortNum" = 3
-  |     +-o BRCM20702 Hub@1d181000  <class AppleUSBDevice, id 0x100011159, registered, matched, active, busy 0 (302 ms), retain 18>
-  |       |   "PortNum" = 1
-  |       +-o Bluetooth USB Host Controller@1d181300  <class AppleUSBDevice, id 0x10001117a, registered, matched, active, busy 0 (86189 ms), retain 23>
-  |             "PortNum" = 3
-  +-o Root Hub Simulation Simulation@14000000  <class AppleUSBRootHubDevice, id 0x1000002ce, registered, matched, active, busy 0 (440 ms), retain 12>
-    +-o CP2102 USB to UART Bridge Controller@14100000  <class AppleUSBDevice, id 0x100018601, registered, matched, active, busy 0 (3 ms), retain 17>
-          "PortNum" = 1
-          "USB Serial Number" = "0001"
 ``` 
+
+
+```
+4224, 0
+5250, 466
+5506, 370
+4994, 298
+6018, 228
+5762, 166
+6274, 122
+6786, 68
+5506, 34
+6017, 508
+6273, 472
+6273, 430
+6017, 398
+5761, 366
+6529, 340
+6273, 326
+6785, 296
+6529, 278
+6017, 252
+6273, 246
+6529, 222
+6529, 210
+7041, 200
+6529, 192
+5761, 188
+5761, 184
+6529, 186
+6529, 182
+6017, 178
+6529, 184
+6273, 180
+6529, 182
+7297, 186
+6273, 192
+5761, 210
+6785, 214
+6529, 230
+6529, 240
+6273, 258
+6273, 274
+6017, 290
+6017, 314
+6529, 332
+6529, 360
+6017, 376
+5761, 406
+6017, 432
+6017, 468
+5761, 500
+6274, 22
+6018, 54
+5762, 108
+5762, 146
+5506, 190
+5506, 240
+5506, 292
+6018, 338
+5506, 402
+5506, 462
+5506, 8
+4994, 68
+5762, 154
+5506, 216
+5250, 290
+4994, 372
+5250, 480
+5506, 52
+4482, 162
+5250, 258
+4994, 398
+4738, 20
+4738, 138
+4738, 284
+5506, 412
+4483, 82
+131, 266
+128, 0
+5504, 0
+7816, 140
+4488, 412
+136, 140
+8576, 0
+7559, 332
+7047, 152
+8839, 30
+5767, 316
+6535, 198
+8583, 38
+9639, 444
+2439, 356
+6023, 150
+9607, 158
+2695, 112
+2951, 494
+2695, 412
+3975, 402
+9863, 260
+9863, 282
+8327, 188
+3719, 162
+4999, 76
+10375, 80
+5767, 72
+9095, 0
+9094, 482
+9863, 26
+8582, 474
+9351, 24
+9607, 4
+7047, 12
+5511, 30
+10375, 78
+6535, 84
+9871, 176
+3719, 172
+5255, 246
+4487, 324
+10375, 332
+4999, 374
+2695, 486
+7815, 148
+5767, 88
+3463, 244
+8583, 330
+8839, 438
+7815, 36
+8583, 176
+3207, 304
+5511, 456
+7815, 146
+5767, 198
+6535, 370
+7304, 100
+136, 244
+4480, 0
+5512, 68
+4232, 362
+6280, 90
+2952, 320
+8328, 58
+2440, 244
+3209, 164
+2441, 316
+3977, 182
+137, 492
+4736, 0
+2953, 326
+7050, 166
+6281, 498
+7305, 156
+7049, 272
+7049, 482
+7305, 198
+7049, 426
+8841, 166
+7560, 452
+7304, 206
+7816, 506
+8584, 296
+8328, 80
+8584, 360
+8584, 172
+8840, 500
+8840, 422
+9352, 228
+8840, 58
+9351, 446
+9351, 312
+9863, 180
+9863, 56
+10119, 486
+10375, 382
+10375, 288
+9351, 208
+9607, 172
+9607, 52
+9095, 10
+9607, 490
+9607, 376
+9607, 356
+10631, 338
+10631, 276
+10375, 260
+10375, 250
+10375, 256
+10375, 246
+10375, 252
+10375, 228
+10375, 254
+10375, 260
+9607, 314
+9607, 338
+9607, 404
+9607, 442
+9607, 500
+9607, 38
+9863, 104
+9351, 186
+11143, 248
+9607, 316
+9863, 394
+9351, 480
+9351, 62
+9095, 174
+9863, 276
+9095, 460
+8328, 74
+8840, 242
+8072, 406
+9352, 42
+9096, 194
+7816, 378
+7560, 78
+7304, 231
+8072, 455
+6024, 179
+6280, 197
+7560, 219
+5768, 291
+6536, 369
+6791, 485
+7815, 73
+7303, 285
+8839, 439
+7303, 91
+8327, 323
+8583, 61
+8582, 299
+9094, 49
+9094, 329
+8326, 79
+8838, 365
+6022, 165
+7302, 105
+4230, 501
+4998, 257
+5765, 189
+6788, 267
+4740, 381
+5508, 489
+5764, 489
+5764, 95
+6531, 269
+```
