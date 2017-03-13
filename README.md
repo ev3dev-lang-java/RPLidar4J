@@ -8,6 +8,25 @@ A Java development to provide support for RPLidar A1
 - Review output from real Python to improve the Dummy Object
 - Add Lombok for POJO
 
+```
+java -jar /home/robot/RPLidar4J-all-0.1.0.jar
+ev3dev#0|2017-03-13 23:54:23 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 - /home/robot/ultra_simple
+ev3dev#0|2017-03-13 23:54:23 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 - Is Execute allow : false
+ev3dev#0|2017-03-13 23:54:23 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 - Is Write allow : true
+ev3dev#0|2017-03-13 23:54:23 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 - Is Read allow : true
+ev3dev#0|2017-03-13 23:54:27 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 - Ultra simple LIDAR data grabber for RPLIDAR.
+ev3dev#0|2017-03-13 23:54:27 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 - Version: 1.5.7
+ev3dev#0|2017-03-13 23:54:27 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 - RPLIDAR S/N: 95C299F3C1E39AF2A2E09AF006133230
+ev3dev#0|2017-03-13 23:54:27 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 - Firmware Ver: 1.14
+ev3dev#0|2017-03-13 23:54:27 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 - Hardware Rev: 0
+ev3dev#0|2017-03-13 23:54:27 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 - RPLidar health status : 0
+ev3dev#0|2017-03-13 23:54:27 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 -    theta: 0.19 Dist: 02868.25 Q: 12 
+ev3dev#0|2017-03-13 23:54:27 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 -    theta: 1.33 Dist: 02950.25 Q: 12 
+ev3dev#0|2017-03-13 23:54:27 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 -    theta: 2.47 Dist: 03035.00 Q: 13 
+ev3dev#0|2017-03-13 23:54:27 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 -    theta: 3.58 Dist: 03127.00 Q: 19 
+ev3dev#0|2017-03-13 23:54:27 [main] TRACE ev3dev.sensors.slamtec.RPLidarA1 -    theta: 4.73 Dist: 03245.75 Q: 15 
+```
+
 # Getting Started:
 
 ```
