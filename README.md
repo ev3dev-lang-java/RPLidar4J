@@ -6,9 +6,8 @@ A Java development to provide support for [RPLidar A1](http://www.slamtec.com/en
 
 ## TODO
 
-- Add JUnit dependency on build.gradle
-- Review output from real Python to improve the Dummy Object
-- Add Lombok for POJO
+- Add Mock support
+- Add OS Detection (The project is designed for EV3 & Raspi Boards)
 
 ```
 java -jar /home/robot/RPLidar4J-all-0.1.0.jar

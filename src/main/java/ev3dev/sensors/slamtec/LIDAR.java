@@ -2,6 +2,7 @@ package ev3dev.sensors.slamtec;
 
 public interface LIDAR {
 
-    Scan scan();
-
+    void init() throws LIDARServiceException;
+    Scan scan() throws LIDARServiceException;
+    void close() throws LIDARServiceException;
 }

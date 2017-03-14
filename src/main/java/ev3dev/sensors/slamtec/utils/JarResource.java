@@ -1,9 +1,6 @@
 package ev3dev.sensors.slamtec.utils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 
 public class JarResource {
@@ -15,7 +12,7 @@ public class JarResource {
      * @return The path to the exported resource
      * @throws Exception
      */
-    static public String export(String resourceName) throws Exception {
+     public String export(String resourceName) throws IOException {
         InputStream stream = null;
         OutputStream resStreamOut = null;
         String jarFolder;
@@ -33,7 +30,7 @@ public class JarResource {
                 resStreamOut.write(buffer, 0, readBytes);
             }
         } catch (Exception ex) {
-            throw ex;
+            throw new IOException(ex);
         } finally {
             stream.close();
             resStreamOut.close();

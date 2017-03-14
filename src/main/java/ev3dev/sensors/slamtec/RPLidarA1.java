@@ -1,26 +1,37 @@
 package ev3dev.sensors.slamtec;
 
 import ev3dev.sensors.slamtec.utils.JarResource;
+import ev3dev.sensors.slamtec.utils.ProcessManager;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 public @Slf4j class RPLidarA1 implements LIDAR {
 
+    final private ProcessManager processManager;
+    final private JarResource jarResource;
+
+    final private String SLAMTEC_BINARY = "ultra_simple";
+    private String SLAMTEC_PATH;
+
+    public RPLidarA1() {
+        this.processManager = new ProcessManager();
+        this.jarResource = new JarResource();
+    }
+
     @Override
-    public Scan scan() {
+    public void init() throws LIDARServiceException {
 
-        try{
+        try {
+            processManager.execute("pkill " + SLAMTEC_BINARY);
 
-            final Process p2 = Runtime.getRuntime().exec("pkill ultra_simple");
-            p2.destroy();
+            SLAMTEC_PATH = jarResource.export("/" + SLAMTEC_BINARY);
+            log.trace(SLAMTEC_PATH);
 
-            final String fullPath3 = JarResource.export("/ultra_simple");
-            log.trace(fullPath3);
-
-            final File file = new File(fullPath3);
+            final File file = new File(SLAMTEC_PATH);
             if(file.exists()){
                 log.trace("Is Execute allow : " + file.canExecute());
                 log.trace("Is Write allow : " + file.canWrite());
@@ -30,7 +41,18 @@ public @Slf4j class RPLidarA1 implements LIDAR {
                 file.setWritable(true);
             }
 
-            final Process p = Runtime.getRuntime().exec(fullPath3);
+        } catch (IOException e) {
+            throw new LIDARServiceException(e.getLocalizedMessage());
+        }
+
+    }
+
+    @Override
+    public Scan scan() throws LIDARServiceException {
+
+        try{
+
+            final Process p = Runtime.getRuntime().exec(SLAMTEC_PATH);
             final BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
             final StringBuffer output = new StringBuffer();
             String line = "";
@@ -46,19 +68,33 @@ public @Slf4j class RPLidarA1 implements LIDAR {
             in.close();
             p.destroy();
 
-            if(file.delete()){
-                System.out.println(file.getName() + " is deleted!");
-            }else{
-                log.trace("Delete operation is failed.");
-            }
-            final Process p3 = Runtime.getRuntime().exec("pkill ultra_simple");
-            p3.destroy();
-        }catch(Exception e){
+        }catch(IOException e){
             log.error(e.getLocalizedMessage());
+            throw new LIDARServiceException(e.getLocalizedMessage());
         }
 
         return null;
 
+    }
+
+    @Override
+    public void close() throws LIDARServiceException {
+
+        try {
+
+            final File file = new File(SLAMTEC_PATH);
+            if(file.delete()){
+                log.info("{} is deleted!", file.getName());
+            }else{
+                log.trace("Delete operation is failed.");
+            }
+
+            processManager.execute("pkill " + SLAMTEC_BINARY);
+
+        }catch(IOException e){
+            log.error(e.getLocalizedMessage());
+            throw new LIDARServiceException(e.getLocalizedMessage());
+        }
     }
 
 }
