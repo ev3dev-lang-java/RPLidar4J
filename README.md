@@ -1,6 +1,8 @@
 # RPLidar4J
 
-A Java development to provide support for RPLidar A1
+A Java development to provide support for [RPLidar A1](http://www.slamtec.com/en/Lidar)
+
+![](https://raw.githubusercontent.com/ev3dev-lang-java/RPLidar4J/master/docs/piStormsV2_RPLidarA1.jpg)
 
 ## TODO
 
