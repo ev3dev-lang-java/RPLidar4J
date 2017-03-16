@@ -1,14 +1,18 @@
 package ev3dev.sensors.slamtec;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Scan {
 
-    private final int[] distances;
+    private List<ScanDistance> distances = Collections.synchronizedList(new ArrayList<ScanDistance>());
 
-    public Scan(int[] distances) {
+    public Scan(final List<ScanDistance> distances) {
         this.distances = distances;
     }
 
-    public int[] getDistances() {
+    public List<ScanDistance> getDistances() {
         return distances;
     }
 }

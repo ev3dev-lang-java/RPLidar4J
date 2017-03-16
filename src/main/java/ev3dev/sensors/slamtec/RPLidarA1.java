@@ -9,8 +9,30 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public @Slf4j class RPLidarA1 implements LIDAR {
+public @Slf4j class RPLidarA1 implements RPLidarProvider {
 
+    private final RPLidarProvider rpLidarProvider;
+
+    public RPLidarA1() {
+        this.rpLidarProvider = RPLidarFactory.getInstance();
+    }
+
+    @Override
+    public void init() throws LIDARServiceException {
+        rpLidarProvider.init();
+    }
+
+    @Override
+    public Scan scan() throws LIDARServiceException {
+        return rpLidarProvider.scan();
+    }
+
+    @Override
+    public void close() throws LIDARServiceException {
+        rpLidarProvider.close();
+    }
+
+    /*
     final private ProcessManager processManager;
     final private JarResource jarResource;
 
@@ -96,5 +118,6 @@ public @Slf4j class RPLidarA1 implements LIDAR {
             throw new LIDARServiceException(e.getLocalizedMessage());
         }
     }
+    */
 
 }

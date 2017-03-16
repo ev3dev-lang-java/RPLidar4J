@@ -1,6 +1,8 @@
 package ev3dev.sensors.slamtec;
 
-public interface LIDAR {
+public interface RPLidarProvider {
+
+    int SCAN_DEGREES = 360;
 
     void init() throws LIDARServiceException;
     Scan scan() throws LIDARServiceException;
