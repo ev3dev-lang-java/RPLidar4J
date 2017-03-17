@@ -10,6 +10,8 @@ repositories {
 }
 
 dependencies {
+   compile("org.rxtx:rxtx:2.1.7")
+   compile group: 'org.ddogleg', name: 'ddogleg', version: '0.10'
    compile("org.projectlombok:lombok:1.16.8")
    compile("ch.qos.logback:logback-classic:1.1.6")
 

@@ -62,6 +62,82 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 ```
 
 ```
+https://packages.debian.org/jessie/armhf/librxtx-java/filelist
+sudo apt-get install librxtx-java
+java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo2
+
+```
+
+## Output
+
+```
+robot@ev3dev:~$ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo3
+Opening port /dev/ttyUSB0
+Stable Library
+=========================================
+Native lib Version = RXTX-2.2pre2
+Java lib Version   = RXTX-2.1-7
+WARNING:  RXTX Version mismatch
+	Jar version = RXTX-2.1-7
+	native lib Version = RXTX-2.2pre2
+HEALTH:
+  Good
+  error_code = 0
+
+true   0   theta = 116.86 r =       0.00
+false   0   theta = 118.03 r =       0.00
+false  31   theta = 111.77 r =    1951.75
+false   0   theta = 120.39 r =       0.00
+false  34   theta = 114.11 r =    1913.00
+false  31   theta = 115.31 r =    1896.25
+false   9   theta = 116.50 r =    1874.75
+false  37   theta = 117.67 r =    1875.75
+false  26   theta = 118.86 r =    1863.75
+false  10   theta = 120.06 r =    1853.75
+false  10   theta = 121.23 r =    1853.00
+false  10   theta = 122.41 r =    1832.00
+false  11   theta = 123.59 r =    1831.00
+false  38   theta = 124.77 r =    1817.50
+false  37   theta = 125.98 r =    1814.00
+false  14   theta = 127.11 r =    1811.50
+false  39   theta = 128.30 r =    1803.25
+false  38   theta = 129.53 r =    1796.50
+false  22   theta = 130.66 r =    1799.50
+false  38   theta = 131.88 r =    1793.75
+false  29   theta = 133.06 r =    1789.25
+false  36   theta = 134.20 r =    1789.50
+false  27   theta = 135.38 r =    1790.00
+false  37   theta = 136.63 r =    1787.00
+false  36   theta = 137.78 r =    1791.00
+false  22   theta = 138.92 r =    1798.75
+false  19   theta = 140.13 r =    1794.75
+false  39   theta = 141.34 r =    1802.75
+false  38   theta = 142.52 r =    1803.25
+false  37   theta = 143.69 r =    1812.25
+false  32   theta = 144.88 r =    1821.50
+false  35   theta = 146.03 r =    1824.00
+false  17   theta = 147.22 r =    1833.00
+false  43   theta = 148.39 r =    1840.75
+false  21   theta = 149.56 r =    1853.00
+false   9   theta = 150.72 r =    1874.75
+false  39   theta = 151.89 r =    1868.50
+false  20   theta = 153.08 r =    1886.25
+false   0   theta = 161.69 r =       0.00
+false  34   theta = 155.41 r =    1911.25
+false  30   theta = 156.59 r =    1927.25
+false  21   theta = 157.77 r =    1944.00
+false  34   theta = 158.97 r =    1957.00
+false  24   theta = 160.14 r =    1971.75
+false  36   theta = 161.22 r =    1993.75
+false  33   theta = 162.39 r =    2011.00
+false  23   theta = 163.56 r =    2038.50
+false   9   theta = 164.77 r =    2052.25
+false  32   theta = 165.92 r =    2082.00
+false  13   theta = 167.08 r =    2106.00
+false  16   theta = 168.22 r =    2144.50
+```
+
+```
 cd ~
 mkdir slamtec          
 mkdir slamtec/rplidara1
