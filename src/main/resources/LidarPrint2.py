@@ -1,10 +1,8 @@
-import serial
 import math
-from time import sleep
-import numpy as np 
-import sys
-import re
+import numpy as np
 import optparse
+import serial
+from time import sleep
 
 ###############################
 #

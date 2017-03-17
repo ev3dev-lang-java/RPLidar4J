@@ -1,7 +1,6 @@
 package ev3dev.sensors.slamtec.utils;
 
 import java.io.*;
-import java.net.URL;
 
 public class JarResource {
 
