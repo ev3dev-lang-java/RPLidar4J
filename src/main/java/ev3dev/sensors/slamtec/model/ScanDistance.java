@@ -1,17 +1,10 @@
 package ev3dev.sensors.slamtec.model;
 
-import lombok.*;
+import lombok.Value;
 
-@AllArgsConstructor
-@ToString
-@EqualsAndHashCode
+@Value
 public class ScanDistance {
 
-    @NonNull
-    @Getter
     private final int angle;
-
-    @NonNull
-    @Getter
     private final double distance;
 }
