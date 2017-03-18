@@ -12,6 +12,10 @@ public class Scan {
         this.distances = distances;
     }
 
+    public Scan() {
+        this.distances = new ArrayList<ScanDistance>();
+    }
+
     public List<ScanDistance> getDistances() {
         return distances;
     }

@@ -1,24 +1,36 @@
 package examples;
 
+import lombok.extern.slf4j.Slf4j;
 import roboticinception.rplidar.*;
 
-/**
- * Prints out raw scans from the low level driver
- *
- * @author Peter Abeles
- */
-public class Demo3 implements RpLidarListener {
+public @Slf4j class Demo3 implements RpLidarListener {
+
+    int counter = 0;
+    boolean flag = false;
 
     @Override
     public void handleMeasurement(RpLidarMeasurement measurement) {
-        //System.out.println("demo");
+
+        if(flag){
+            if(measurement.start){
+                log.info("{}", counter);
+                counter= 0;
+                flag=false;
+            }
+        }
+
+        if (measurement.start) {
+            flag = true;
+        }
+
+        if(flag){
+            counter++;
+        }
+
         double deg = measurement.angle / 64.0;
         double r = measurement.distance / 4.0;
-        if (measurement.start)
-            System.out.println();
-        //if( deg > 350 )
-            System.out.printf(measurement.start + " %3d   theta = %6.2f r = %10.2f\n", measurement.quality, deg, r);
-//		System.out.printf(measurement.start + " %3d   theta = %4d r = %5d\n", measurement.quality, measurement.angle, measurement.distance);
+        //log.info("demo");
+        //log.info("{} {} {} {}", measurement.start, measurement.quality, deg, r);
     }
 
     @Override
@@ -33,18 +45,28 @@ public class Demo3 implements RpLidarListener {
     }
 
     public static void main(String[] args) throws Exception {
+
         RpLidarLowLevelDriver driver = new RpLidarLowLevelDriver("/dev/ttyUSB0", new Demo3());
         driver.setVerbose(false);
-
         driver.sendReset();
         driver.pause(100);
 
         //driver.sendGetInfo(1000);
-        driver.sendGetHealth(1000);
-        driver.sendScan(500);
-        driver.pause(10000);
-        driver.sendReset();
-        driver.pause(100);
+        //driver.sendGetHealth(1000);
+
+        for(int x = 0; x < 15; x++ ){
+            long startTime = System.currentTimeMillis();
+            log.info("Iteration: {}", x);
+            driver.sendReset();
+            driver.pause(200);
+            driver.sendScan(500);
+            driver.pause(1000);
+            long endTime   = System.currentTimeMillis();
+            long totalTime = endTime - startTime;
+            log.info("{}", totalTime);
+        }
+
+        //driver.pause(100);
         driver.shutdown();
         driver.pause(100);
         System.exit(0);

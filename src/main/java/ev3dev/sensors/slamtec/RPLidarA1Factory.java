@@ -14,6 +14,6 @@ import java.util.Objects;
             return new RPLidarA1Fake();
         }
 
-        return new RPLidarA1Monitor();
+        return new RPLidarA1Driver();
     }
 }

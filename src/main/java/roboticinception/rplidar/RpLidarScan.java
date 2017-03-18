@@ -17,6 +17,7 @@ public class RpLidarScan {
 	public int distance[] = new int[N];
 	/** System.currentTimeMillis() when a new observation arrived */
 	public long time[] = new long[N];
+	//TODO Analyze if it possible to replace
 	/** index of elements which were written to */
 	public GrowQueue_I32 used = new GrowQueue_I32();
 
