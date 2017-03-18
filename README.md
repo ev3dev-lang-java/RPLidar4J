@@ -150,4 +150,3 @@ cd ./output/Linux/Release
 ./simple_grabber /dev/ttyUSB0
 ./ultra_simple /dev/ttyUSB0
 ```
-```
