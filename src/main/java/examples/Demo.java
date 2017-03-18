@@ -19,9 +19,8 @@ public @Slf4j class Demo {
             log.info("Measures: {}", counter);
         }
 
-        log.info("End demo");
         lidar.close();
-        log.info("End demo2");
+        log.info("End demo");
         System.exit(0);
     }
 }
