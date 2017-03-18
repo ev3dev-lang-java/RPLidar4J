@@ -1,7 +1,7 @@
 package examples;
 
+import ev3dev.sensors.slamtec.service.*;
 import lombok.extern.slf4j.Slf4j;
-import roboticinception.rplidar.*;
 
 public @Slf4j class Demo3 implements RpLidarListener {
 
@@ -51,8 +51,8 @@ public @Slf4j class Demo3 implements RpLidarListener {
         driver.sendReset();
         driver.pause(100);
 
-        //driver.sendGetInfo(1000);
-        //driver.sendGetHealth(1000);
+        //service.sendGetInfo(1000);
+        //service.sendGetHealth(1000);
 
         for(int x = 0; x < 15; x++ ){
             long startTime = System.currentTimeMillis();
@@ -66,7 +66,7 @@ public @Slf4j class Demo3 implements RpLidarListener {
             log.info("{}", totalTime);
         }
 
-        //driver.pause(100);
+        //service.pause(100);
         driver.shutdown();
         driver.pause(100);
         System.exit(0);

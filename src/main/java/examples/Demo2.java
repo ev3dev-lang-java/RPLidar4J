@@ -1,10 +1,10 @@
 package examples;
 
-import roboticinception.rplidar.RpLidarHighLevelDriver;
-import roboticinception.rplidar.RpLidarScan;
+import ev3dev.sensors.slamtec.service.RpLidarHighLevelDriver;
+import ev3dev.sensors.slamtec.service.RpLidarScan;
 
 /**
- * Prints out raw scans from the low level driver
+ * Prints out raw scans from the low level service
  *
  * @author Peter Abeles
  */
