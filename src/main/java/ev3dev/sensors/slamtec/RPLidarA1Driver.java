@@ -43,8 +43,8 @@ import java.util.List;
     @Override
     public Scan scan() throws RPLidarA1ServiceException {
         long startTime = System.currentTimeMillis();
-        driver.sendScan(400);
-        driver.pause(800);
+        driver.sendScan(300);
+        driver.pause(700);
         long endTime   = System.currentTimeMillis();
         long totalTime = endTime - startTime;
         log.trace("Time consumed: {}", totalTime);
