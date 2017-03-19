@@ -9,7 +9,7 @@ public @Slf4j class RPLidarA1 implements RPLidarProvider {
     private final String USBPort;
 
     public RPLidarA1(final String USBPort) {
-        this.rpLidarProvider = RPLidarA1Factory.getInstance();
+        this.rpLidarProvider = RPLidarA1Factory.getInstance(USBPort);
         this.USBPort = USBPort;
     }
 

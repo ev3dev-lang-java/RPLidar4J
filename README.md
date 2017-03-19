@@ -4,6 +4,10 @@ A Java development to provide support for [RPLidar A1](http://www.slamtec.com/en
 
 ![](https://raw.githubusercontent.com/ev3dev-lang-java/RPLidar4J/master/docs/piStormsV2_RPLidarA1.jpg)
 
+https://lejos.sourceforge.io/forum/viewtopic.php?t=6986
+
+http://www.robopeak.com/blog/?p=611
+
 ## TODO
 
 - Add Mock support

@@ -10,8 +10,8 @@ import java.util.List;
 
 @Slf4j class RPLidarA1Fake implements RPLidarProvider{
 
-    public RPLidarA1Fake(){
-        log.trace("Returning a Fake RPLidarA1 Object");
+    public RPLidarA1Fake(final String USBPort){
+        log.trace("Starting a Fake RPLidarA1 Object");
     }
 
     @Override
