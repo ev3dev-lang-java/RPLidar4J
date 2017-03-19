@@ -11,7 +11,7 @@ import java.util.List;
 
 @Slf4j class RPLidarA1Driver implements RPLidarProvider, RpLidarListener {
 
-    private boolean closing = false;
+    private boolean closingStatus = false;
 
     private RpLidarLowLevelDriver driver;
     private final String USBPort;
@@ -34,7 +34,7 @@ import java.util.List;
         } catch (Exception e) {
             throw new RPLidarA1ServiceException(e);
         }
-        closing = false;
+        closingStatus = false;
         driver.setVerbose(false);
         driver.sendReset();
         driver.pause(200);
@@ -43,8 +43,8 @@ import java.util.List;
     @Override
     public Scan scan() throws RPLidarA1ServiceException {
         long startTime = System.currentTimeMillis();
-        driver.sendScan(300);
-        driver.pause(700);
+        driver.sendScan(400);
+        driver.pause(800);
         long endTime   = System.currentTimeMillis();
         long totalTime = endTime - startTime;
         log.trace("Time consumed: {}", totalTime);
@@ -58,8 +58,7 @@ import java.util.List;
 
     @Override
     public void close() throws RPLidarA1ServiceException {
-        closing = true;
-        driver.pause(100);
+        closingStatus = true;
         driver.shutdown();
         driver.pause(100);
     }
@@ -67,7 +66,7 @@ import java.util.List;
     @Override
     public void handleMeasurement(RpLidarMeasurement measurement) {
 
-        if(!this.closing){
+        if(!this.closingStatus){
 
             if(flag){
                 if(measurement.start){
