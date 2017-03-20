@@ -1,21 +1,39 @@
 # RPLidar4J
 
-A Java development to provide support for [RPLidar A1](http://www.slamtec.com/en/Lidar)
+RPLidar4J, is a Java library designed to manage the 2D Lidar sensor
+ [RPLidar A1](http://www.slamtec.com/en/Lidar) from Slamtec, formerly RoboPeak in a easy way.
 
-![](https://raw.githubusercontent.com/ev3dev-lang-java/RPLidar4J/master/docs/piStormsV2_RPLidarA1.jpg)
-
-https://lejos.sourceforge.io/forum/viewtopic.php?t=6986
-
-http://www.robopeak.com/blog/?p=611
+![](./docs/all_RPLidarA1.jpg)
 
 ## TODO
 
 - Add Mock support
-- Add OS Detection (The project is designed for EV3 & Raspi Boards)
+- Detect USBDevice connected
+- Add LeJOS Sensor support
+- Release a Snapshot version on https://jitpack.io
+- Return always a Scan object with 360 values
 
-# Getting Started:
+## Getting Started
 
-You should see something similar:
+### Connect the sensor on your robot
+
+The sensor incorporates in the kit a small USB Controller, so connect 
+the sensor on a free USB port and review that the Linux system detected
+the device.
+
+```
+robot@ev3dev:/dev$ lsusb
+Bus 001 Device 004: ID 10c4:ea60 Cygnal Integrated Products, Inc. CP210x UART Bridge / myAVR mySmartUSB light
+Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp. SMSC9512/9514 Fast Ethernet Adapter
+Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp. 
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+```
+
+If you detected this element: `Cygnal Integrated Products, Inc. CP210x UART Bridge / myAVR mySmartUSB light`
+is a good signal, the USB Controller was recognized in the system.
+
+Now, it is necessary to review what is the port associated with 
+the sensor.
 
 ```
 robot@ev3dev:/dev$ ls /dev/
@@ -32,22 +50,33 @@ disk             kmsg     mapper        ppp                 ram2   serial  tty12
 fb0              log      mem           ptmx                ram3   shm     tty13   tty23  tty33  tty43  tty53  tty63  vc-cma     vcsa    zero
 ```
 
-if you type:
+If you didn´t connect a similar device on your robot, the device 
+`ttyUSB0` should be your RPLidarA1 unit. 
+
+Now, it is time to develop some code with Java.
+
+### Install librxtx-java
+
+The library has a depencency with `librxtx-java` a native library to 
+manage Serial port. Install it to continue:
 
 ```
-robot@ev3dev:/dev$ lsusb
-Bus 001 Device 004: ID 10c4:ea60 Cygnal Integrated Products, Inc. CP210x UART Bridge / myAVR mySmartUSB light
-Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp. SMSC9512/9514 Fast Ethernet Adapter
-Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp. 
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-```
-
-```
-https://packages.debian.org/jessie/armhf/librxtx-java/filelist
 sudo apt-get install librxtx-java
 ```
 
-## Demo
+The Debian package is installed, you should be the native library on the
+following path: `/usr/lib/jni/`
+
+PENDING TO SHOW A LIST OF PATH
+
+### Add the dependency on the project
+
+PENDING TO HAVE A SNAPSHOT
+
+### Example
+
+Create a new Java project on your favourite IDE and add the following 
+class on the project:
 
 ``` java
 package examples;
@@ -79,7 +108,9 @@ public @Slf4j class Demo {
 
 ```
 
-## Output
+### Output
+
+
 
 ```
 robot@ev3dev:~$ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo
@@ -131,6 +162,12 @@ WARNING:  RXTX Version mismatch
 2017-03-18 13:08:48 [main] INFO  examples.Demo - Measures: 297
 2017-03-18 13:08:48 [main] INFO  examples.Demo - End demo
 ```
+
+https://lejos.sourceforge.io/forum/viewtopic.php?t=6986
+
+http://www.robopeak.com/blog/?p=611
+
+
 
 ```
 cd ~
