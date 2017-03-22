@@ -1,25 +1,28 @@
 # RPLidar4J
 
-RPLidar4J, is a Java library designed to manage the 2D Lidar sensor
- [RPLidar A1](http://www.slamtec.com/en/Lidar) from Slamtec, formerly RoboPeak in a easy way.
+RPLidar4J, is a Java library designed to manage the sensor  
+ [RPLidar A1](http://www.slamtec.com/en/Lidar), a 2D LIDAR sensor in a easy way.
 
-![](./docs/all_RPLidarA1.jpg)
+![](./docs/images/all_RPLidarA1.jpg)
 
 ## TODO
 
-- Add Mock support
 - Detect USBDevice connected
-- Add LeJOS Sensor support
 - Release a Snapshot version on https://jitpack.io
+- Add LeJOS Sensor support
+- Add Mock support
 - Return always a Scan object with 360 values
 
 ## Getting Started
 
 ### Connect the sensor on your robot
 
-The sensor incorporates in the kit a small USB Controller, so connect 
-the sensor on a free USB port and review that the Linux system detected
-the device.
+If you adquire the RPLidarA1 Kit, the sensor includes in the Kit a small
+USB Controller. Connect plug the sensor with the USB Controller. 
+Later, connect the USB Controller to your favourite Brick (EV3, BrickPi+ & PiStorms)
+You should notice that the brick turn on the USB Controller and 
+the sensor start turning. In order to know if EV3Dev recognize 
+the sensor execute the command `lsusb`:
 
 ```
 robot@ev3dev:/dev$ lsusb
@@ -32,8 +35,9 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 If you detected this element: `Cygnal Integrated Products, Inc. CP210x UART Bridge / myAVR mySmartUSB light`
 is a good signal, the USB Controller was recognized in the system.
 
-Now, it is necessary to review what is the port associated with 
-the sensor.
+Once you know that Lynux detect the USB Controller, it is necessary to
+know in what device are associated. To list the devices of your brick,
+type `ls /dev`:
 
 ```
 robot@ev3dev:/dev$ ls /dev/
@@ -50,33 +54,41 @@ disk             kmsg     mapper        ppp                 ram2   serial  tty12
 fb0              log      mem           ptmx                ram3   shm     tty13   tty23  tty33  tty43  tty53  tty63  vc-cma     vcsa    zero
 ```
 
-If you didn´t connect a similar device on your robot, the device 
-`ttyUSB0` should be your RPLidarA1 unit. 
-
-Now, it is time to develop some code with Java.
+If you didn´t connect another device on your robot, the device 
+`ttyUSB0` should be your RPLidarA1 sensor. 
 
 ### Install librxtx-java
 
-The library has a depencency with `librxtx-java` a native library to 
-manage Serial port. Install it to continue:
+Current implementation uses the library `librxtx-java` to manage 
+the Serial port communications. This library is very popular on Java 
+ecosystem. To install the library on your brick, install the following 
+Debian package:
 
 ```
 sudo apt-get install librxtx-java
 ```
 
-The Debian package is installed, you should be the native library on the
-following path: `/usr/lib/jni/`
+When the Debian package is finished, you should be the native library on
+the following path: `/usr/lib/jni/`
 
-PENDING TO SHOW A LIST OF PATH
+```
+robot@ev3dev:~$ ls /usr/lib/jni/
+libopencv_java249.so   librxtxI2C.so               librxtxParallel.so       librxtxRS485.so        librxtxRaw.so             librxtxSerial.so
+librxtxI2C-2.2pre1.so  librxtxParallel-2.2pre1.so  librxtxRS485-2.2pre1.so  librxtxRaw-2.2pre1.so  librxtxSerial-2.2pre1.so
+```
 
 ### Add the dependency on the project
 
+To use this project, import the library as a Maven dependency.
+
 PENDING TO HAVE A SNAPSHOT
 
-### Example
+### Using the sensor
 
 Create a new Java project on your favourite IDE and add the following 
 class on the project:
+
+//TODO Improve the example adding a filter from the angle 345-15º using streams
 
 ``` java
 package examples;
@@ -108,9 +120,16 @@ public @Slf4j class Demo {
 
 ```
 
+Once, you have the example in your project, create a Jar with the project
+and deploy on your Brick using some Plugin for Maven or Gradle.
+
+To run the example this the command:
+
+```
+java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo
+```
+
 ### Output
-
-
 
 ```
 robot@ev3dev:~$ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo
@@ -123,39 +142,10 @@ Java lib Version   = RXTX-2.1-7
 WARNING:  RXTX Version mismatch
 	Jar version = RXTX-2.1-7
 	native lib Version = RXTX-2.2pre2
-2017-03-18 13:08:39 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 53
-2017-03-18 13:08:39 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 184
-2017-03-18 13:08:39 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 66
-2017-03-18 13:08:39 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 50
-2017-03-18 13:08:39 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 181
-2017-03-18 13:08:39 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 21
-2017-03-18 13:08:39 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 276
-2017-03-18 13:08:39 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 25
-2017-03-18 13:08:39 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1706
-2017-03-18 13:08:39 [main] INFO  examples.Demo - Measures: 25
-2017-03-18 13:08:41 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1707
-2017-03-18 13:08:41 [main] INFO  examples.Demo - Measures: 25
-2017-03-18 13:08:42 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 152
-2017-03-18 13:08:42 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 101
-2017-03-18 13:08:42 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 1
-2017-03-18 13:08:42 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 49
-2017-03-18 13:08:42 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 92
-2017-03-18 13:08:42 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 298
-2017-03-18 13:08:42 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 116
-2017-03-18 13:08:42 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 1
-2017-03-18 13:08:42 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 180
-2017-03-18 13:08:42 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 20
-2017-03-18 13:08:42 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 2
-2017-03-18 13:08:42 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1707
-2017-03-18 13:08:42 [main] INFO  examples.Demo - Measures: 2
-2017-03-18 13:08:44 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1707
-2017-03-18 13:08:44 [main] INFO  examples.Demo - Measures: 2
-2017-03-18 13:08:45 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 97
-2017-03-18 13:08:45 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 51
-2017-03-18 13:08:46 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 186
-2017-03-18 13:08:46 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 116
-2017-03-18 13:08:46 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 181
-2017-03-18 13:08:46 [Thread-1] INFO  e.sensors.slamtec.RPLidarA1Driver - 297
+2017-03-18 13:08:39 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1106
+2017-03-18 13:08:39 [main] INFO  examples.Demo - Measures: 276
+2017-03-18 13:08:42 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1107
+2017-03-18 13:08:42 [main] INFO  examples.Demo - Measures: 298
 2017-03-18 13:08:46 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1707
 2017-03-18 13:08:46 [main] INFO  examples.Demo - Measures: 297
 2017-03-18 13:08:48 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1707
@@ -163,11 +153,13 @@ WARNING:  RXTX Version mismatch
 2017-03-18 13:08:48 [main] INFO  examples.Demo - End demo
 ```
 
+## UML Design
+
+![](./docs/uml/graph.png)
+
 https://lejos.sourceforge.io/forum/viewtopic.php?t=6986
 
 http://www.robopeak.com/blog/?p=611
-
-
 
 ```
 cd ~
