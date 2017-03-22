@@ -7,10 +7,8 @@ RPLidar4J, is a Java library designed to manage the sensor [RPLidar A1](http://w
 ## TODO
 
 - Detect USBDevice connected
-- Release a Snapshot version on https://jitpack.io
 - Add LeJOS Sensor support
 - Add Mock support
-- Return always a Scan object with 360 values
 
 ## Getting Started
 
@@ -80,7 +78,15 @@ librxtxI2C-2.2pre1.so  librxtxParallel-2.2pre1.so  librxtxRS485-2.2pre1.so  libr
 
 To use this project, import the library as a Maven dependency.
 
-PENDING TO HAVE A SNAPSHOT
+```
+<dependency>
+    <groupId>com.github.ev3dev-lang-java</groupId>
+    <artifactId>RPLidar4J</artifactId>
+    <version>v0.1.0-SNAPSHOT</version>
+</dependency>
+```
+
+Further information: https://jitpack.io/#ev3dev-lang-java/RPLidar4J/v0.1.0-SNAPSHOT
 
 ### Using the sensor
 
