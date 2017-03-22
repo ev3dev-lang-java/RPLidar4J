@@ -5,9 +5,7 @@ import ev3dev.sensors.slamtec.model.ScanDistance;
 import ev3dev.sensors.slamtec.service.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Slf4j class RPLidarA1Driver implements RPLidarProvider, RpLidarListener {
 
@@ -16,11 +14,7 @@ import java.util.List;
     private RpLidarLowLevelDriver driver;
     private final String USBPort;
 
-    private int counter = 0;
-    private boolean flag = false;
     private List<ScanDistance> distancesTemp = Collections.synchronizedList(new ArrayList<>());
-
-    private Scan scan;
 
     public RPLidarA1Driver(final String USBPort) {
         this.USBPort = USBPort;
@@ -49,11 +43,11 @@ import java.util.List;
         long totalTime = endTime - startTime;
         log.trace("Time consumed: {}", totalTime);
 
-        if(scan != null){
-            return scan;
-        }
-
-        return new Scan();
+        final List<ScanDistance> distances = new ArrayList<>();
+        distances.addAll(distancesTemp);
+        distancesTemp.clear();
+        distances.sort(Comparator.comparing(ScanDistance::getAngle));
+        return new Scan(Collections.unmodifiableList(distances));
     }
 
     @Override
@@ -66,38 +60,22 @@ import java.util.List;
     @Override
     public void handleMeasurement(RpLidarMeasurement measurement) {
 
-        if(!this.closingStatus){
+        if(!this.closingStatus) {
 
-            if(flag){
-                if(measurement.start){
-                    log.trace("{}", counter);
-                    synchronized (distancesTemp) {
-                        final List<ScanDistance> distances = new ArrayList<>();
-                        distances.addAll(distancesTemp);
-                        distancesTemp.clear();
-                        scan = new Scan(distances);
-                    }
-                    counter= 0;
-                    flag=false;
-                }
+            int angle = new Double(measurement.angle / 64.0).intValue();
+            double distance = measurement.distance / 4.0;
+
+            if(!this.containAngle(distancesTemp, angle)){
+                distancesTemp.add(new ScanDistance(angle, distance));
             }
-
-            if (measurement.start) {
-                flag = true;
-            }
-
-            if(flag){
-                counter++;
-                double deg = measurement.angle / 64.0;
-                double r = measurement.distance / 4.0;
-                distancesTemp.add(new ScanDistance((int) Math.round(deg), r));
-            }
-
-        //}else {
-            //log.info("Event received when driver is clossing");
         }
-
     }
+
+    public boolean containAngle(final List<ScanDistance> list, final int angle){
+        return list.stream().filter(o -> o.getAngle() == angle).findFirst().isPresent();
+    }
+
+    //Not used at the moment
 
     @Override
     public void handleDeviceHealth(RpLidarHeath health) {

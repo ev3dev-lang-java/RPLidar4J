@@ -101,15 +101,28 @@ public @Slf4j class Demo {
 
     public static void main(String[] args) throws Exception {
 
-        final String USBPort = "ttyUSB0";
+        log.info("Testing RPLidar on a EV3 Brick with Java");
+        final String USBPort = "/dev/ttyUSB0";
         final RPLidarA1 lidar = new RPLidarA1(USBPort);
         lidar.init();
 
-        for(int x = 0; x <= 5; x++){
-            final long counter = lidar.scan().getDistances()
-                    .stream()
-                    .count();
-            log.info("Measures: {}", counter);
+        for(int x = 0; x <= 10; x++){
+            final Scan scan = lidar.scan();
+            log.info("Iteration: {}, Measures: {}", x, scan.getDistances().size());
+            scan.getDistances()
+                .stream()
+                .filter(measure -> {
+                    if(
+                        (measure.getAngle() >= 345) ||
+                        (measure.getAngle() <=15)) {
+                            if(measure.getDistance() <= 50) {
+                                return true;
+                            }
+                            return false;
+                    }
+                    return false;
+                })
+                .forEach(System.out::println);
         }
 
         lidar.close();
@@ -117,7 +130,6 @@ public @Slf4j class Demo {
         System.exit(0);
     }
 }
-
 ```
 
 Once, you have the example in your project, create a Jar with the project
@@ -133,7 +145,8 @@ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo
 
 ```
 robot@ev3dev:~$ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo
-2017-03-18 13:08:37 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Returning a RPLidarA1 Object
+2017-03-22 21:47:48 [main] INFO  examples.Demo - Testing RPLidar on a EV3 Brick with Java
+2017-03-22 21:47:48 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Starting a RPLidarA1 instance
 Opening port /dev/ttyUSB0
 Stable Library
 =========================================
@@ -142,15 +155,56 @@ Java lib Version   = RXTX-2.1-7
 WARNING:  RXTX Version mismatch
 	Jar version = RXTX-2.1-7
 	native lib Version = RXTX-2.2pre2
-2017-03-18 13:08:39 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1106
-2017-03-18 13:08:39 [main] INFO  examples.Demo - Measures: 276
-2017-03-18 13:08:42 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1107
-2017-03-18 13:08:42 [main] INFO  examples.Demo - Measures: 298
-2017-03-18 13:08:46 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1707
-2017-03-18 13:08:46 [main] INFO  examples.Demo - Measures: 297
-2017-03-18 13:08:48 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - 1707
-2017-03-18 13:08:48 [main] INFO  examples.Demo - Measures: 297
-2017-03-18 13:08:48 [main] INFO  examples.Demo - End demo
+2017-03-22 21:47:50 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
+2017-03-22 21:47:50 [main] INFO  examples.Demo - Iteration: 0, Measures: 0
+2017-03-22 21:47:51 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
+2017-03-22 21:47:51 [main] INFO  examples.Demo - Iteration: 1, Measures: 0
+2017-03-22 21:47:52 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
+2017-03-22 21:47:52 [main] INFO  examples.Demo - Iteration: 2, Measures: 292
+2017-03-22 21:47:53 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1005
+2017-03-22 21:47:53 [main] INFO  examples.Demo - Iteration: 3, Measures: 293
+ScanDistance(angle=0, distance=0.0)
+ScanDistance(angle=1, distance=0.0)
+ScanDistance(angle=2, distance=0.0)
+ScanDistance(angle=4, distance=0.0)
+ScanDistance(angle=5, distance=0.0)
+ScanDistance(angle=357, distance=0.0)
+ScanDistance(angle=358, distance=0.0)
+ScanDistance(angle=359, distance=0.0)
+2017-03-22 21:47:54 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
+2017-03-22 21:47:54 [main] INFO  examples.Demo - Iteration: 4, Measures: 288
+ScanDistance(angle=2, distance=0.0)
+ScanDistance(angle=3, distance=0.0)
+ScanDistance(angle=4, distance=0.0)
+ScanDistance(angle=5, distance=0.0)
+ScanDistance(angle=6, distance=0.0)
+ScanDistance(angle=8, distance=0.0)
+ScanDistance(angle=9, distance=0.0)
+ScanDistance(angle=10, distance=0.0)
+ScanDistance(angle=11, distance=0.0)
+ScanDistance(angle=12, distance=0.0)
+2017-03-22 21:47:55 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
+2017-03-22 21:47:55 [main] INFO  examples.Demo - Iteration: 5, Measures: 296
+ScanDistance(angle=0, distance=0.0)
+ScanDistance(angle=349, distance=0.0)
+ScanDistance(angle=353, distance=0.0)
+ScanDistance(angle=355, distance=0.0)
+ScanDistance(angle=356, distance=0.0)
+ScanDistance(angle=358, distance=0.0)
+ScanDistance(angle=359, distance=0.0)
+2017-03-22 21:47:56 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
+2017-03-22 21:47:56 [main] INFO  examples.Demo - Iteration: 6, Measures: 296
+2017-03-22 21:47:57 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
+2017-03-22 21:47:57 [main] INFO  examples.Demo - Iteration: 7, Measures: 297
+2017-03-22 21:47:58 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
+2017-03-22 21:47:58 [main] INFO  examples.Demo - Iteration: 8, Measures: 298
+ScanDistance(angle=375, distance=0.0)
+2017-03-22 21:47:59 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
+2017-03-22 21:47:59 [main] INFO  examples.Demo - Iteration: 9, Measures: 292
+2017-03-22 21:48:00 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
+2017-03-22 21:48:00 [main] INFO  examples.Demo - Iteration: 10, Measures: 301
+2017-03-22 21:48:00 [main] INFO  examples.Demo - End demo
+robot@ev3dev:~$ 
 ```
 
 ## UML Design

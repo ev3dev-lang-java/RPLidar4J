@@ -1,6 +1,7 @@
 package examples;
 
 import ev3dev.sensors.slamtec.RPLidarA1;
+import ev3dev.sensors.slamtec.model.Scan;
 import lombok.extern.slf4j.Slf4j;
 
 public @Slf4j class Demo {
@@ -13,10 +14,22 @@ public @Slf4j class Demo {
         lidar.init();
 
         for(int x = 0; x <= 10; x++){
-            final long counter = lidar.scan().getDistances()
-                    .stream()
-                    .count();
-            log.info("Iteration: {}, Measures: {}", x, counter);
+            final Scan scan = lidar.scan();
+            log.info("Iteration: {}, Measures: {}", x, scan.getDistances().size());
+            scan.getDistances()
+                .stream()
+                .filter(measure -> {
+                    if(
+                        (measure.getAngle() >= 345) ||
+                        (measure.getAngle() <=15)) {
+                            if(measure.getDistance() <= 50) {
+                                return true;
+                            }
+                            return false;
+                    }
+                    return false;
+                })
+                .forEach(System.out::println);
         }
 
         lidar.close();
