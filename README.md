@@ -208,29 +208,3 @@ robot@ev3dev:~$
 
 ![](./docs/uml/graph.png)
 
-https://lejos.sourceforge.io/forum/viewtopic.php?t=6986
-
-http://www.robopeak.com/blog/?p=611
-
-```
-cd ~
-mkdir slamtec          
-mkdir slamtec/rplidara1
-cd slamtec/rplidara1/
-wget http://www.slamtec.com/download/lidar/sdk/rplidar_sdk.1.4.5.7z
-wget http://www.slamtec.com/download/lidar/sdk/rplidar_sdk_v1.5.7.zip
-sudo apt-get install p7zip-full
-sudo apt-get install unzip
-7z x ~/slamtec/rplidara1/rplidar_sdk_v1.4.5.7z
-7z x ~/slamtec/rplidara1/rplidar_sdk_v1.5.7.zip
-unzip rplidar_sdk_v1.5.7.zip -d rplidar_sdk_v1.5.7
-sudo apt-get install build-essential
-cd rplidar_sdk_v1.5.7/sdk
-make
-```
-
-```
-cd ./output/Linux/Release
-./simple_grabber /dev/ttyUSB0
-./ultra_simple /dev/ttyUSB0
-```
