@@ -88,8 +88,6 @@ PENDING TO HAVE A SNAPSHOT
 Create a new Java project on your favourite IDE and add the following 
 class on the project:
 
-//TODO Improve the example adding a filter from the angle 345-15º using streams
-
 ``` java
 package examples;
 
