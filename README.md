@@ -4,8 +4,34 @@ RPLidar4J, is a Java library designed to manage the sensor [RPLidar A1](http://w
 
 ![](./docs/images/all_RPLidarA1.jpg)
 
+# The sensor
+
+RPLIDAR is a low cost 360 degree 2D laser scanner (LIDAR) solution 
+developed by RoboPeak. The system can perform 360 degree scan within 
+6 meter range. The produced 2D point cloud data can be used in mapping, 
+localization and object/environment modeling
+
+RPLIDAR is basically a laser triangulation measurement system. 
+It can work excellent in all kinds of indoor environment and outdoor 
+environment without sunlight.
+
+The RPLIDAR adopts coordinate system of the left hand. The dead ahead 
+of the sensors is the x axis of the coordinate system; the origin is 
+the rotating center of the range scanner core. The rotation angle 
+increases as rotating clockwise. The detailed definition is shown in 
+the following figure:
+
+![](./docs/images/rplidar_A1.png)
+
+**Technical docs:**
+
+- [datasheet-rplidar](./docs/sdk/datasheet-rplidar.pdf)
+- [communication-protocol](./docs/rpk-02-communication-protocol.pdf)
+
+
 ## TODO
 
+- Add in ScanMeasure POJO, data about quality & atart flag
 - Detect USBDevice connected
 - Add LeJOS Sensor support
 - Add Mock support

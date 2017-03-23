@@ -1,7 +1,5 @@
 package ev3dev.sensors.slamtec.service;
 
-import org.ddogleg.struct.GrowQueue_I32;
-
 import java.util.Arrays;
 
 /**
