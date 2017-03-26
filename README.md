@@ -106,11 +106,11 @@ To use this project, import the library as a Maven dependency.
 <dependency>
     <groupId>com.github.ev3dev-lang-java</groupId>
     <artifactId>RPLidar4J</artifactId>
-    <version>v0.1.0-SNAPSHOT</version>
+    <version>v0.1.0</version>
 </dependency>
 ```
 
-Further information: https://jitpack.io/#ev3dev-lang-java/RPLidar4J/v0.1.0-SNAPSHOT
+Further information: https://jitpack.io/#ev3dev-lang-java/RPLidar4J/v0.1.0
 
 ### Using the sensor
 
@@ -164,7 +164,7 @@ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo
 ### Output
 
 ```
-robot@ev3dev:~$ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0-SNAPSHOT.jar examples.Demo
+robot@ev3dev:~$ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo
 2017-03-26 20:07:53 [main] INFO  examples.Demo - Testing RPLidar on a EV3 Brick with Java
 2017-03-26 20:07:53 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - Starting a RPLidarA1 instance
 2017-03-26 20:07:53 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - Connecting with: /dev/ttyUSB0
