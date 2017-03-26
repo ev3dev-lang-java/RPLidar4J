@@ -13,7 +13,7 @@ public @Slf4j class Demo2 {
         final RPLidarA1 lidar = new RPLidarA1(USBPort);
         lidar.init();
 
-        for(int x = 0; x <= 1; x++){
+        for(int x = 0; x <= 10; x++){
             final long counter = lidar.scan().getDistances()
                     .stream()
                     .count();

@@ -13,22 +13,15 @@ public @Slf4j class Demo {
         final RPLidarA1 lidar = new RPLidarA1(USBPort);
         lidar.init();
 
-        for(int x = 0; x <= 10; x++){
+        for(int x = 0; x <= 5; x++){
+
             final Scan scan = lidar.scan();
             log.info("Iteration: {}, Measures: {}", x, scan.getDistances().size());
             scan.getDistances()
                 .stream()
-                .filter(measure -> {
-                    if(
-                        (measure.getAngle() >= 345) ||
-                        (measure.getAngle() <=15)) {
-                            if(measure.getDistance() <= 50) {
-                                return true;
-                            }
-                            return false;
-                    }
-                    return false;
-                })
+                .filter((measure) -> measure.getQuality() > 10)
+                .filter((measure) -> (measure.getAngle() >= 345 || measure.getAngle() <= 15))
+                .filter((measure) -> measure.getDistance() <= 50)
                 .forEach(System.out::println);
         }
 
