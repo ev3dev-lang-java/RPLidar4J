@@ -7,4 +7,6 @@ public class ScanDistance {
 
     private final int angle;
     private final double distance;
+    private final int quality;
+    private final boolean start;
 }

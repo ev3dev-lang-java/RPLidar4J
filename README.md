@@ -31,8 +31,6 @@ the following figure:
 
 ## TODO
 
-- Add in ScanMeasure POJO, data about quality & atart flag
-- Detect USBDevice connected
 - Add LeJOS Sensor support
 - Add Mock support
 
@@ -135,22 +133,15 @@ public @Slf4j class Demo {
         final RPLidarA1 lidar = new RPLidarA1(USBPort);
         lidar.init();
 
-        for(int x = 0; x <= 10; x++){
+        for(int x = 0; x <= 5; x++){
+
             final Scan scan = lidar.scan();
             log.info("Iteration: {}, Measures: {}", x, scan.getDistances().size());
             scan.getDistances()
                 .stream()
-                .filter(measure -> {
-                    if(
-                        (measure.getAngle() >= 345) ||
-                        (measure.getAngle() <=15)) {
-                            if(measure.getDistance() <= 50) {
-                                return true;
-                            }
-                            return false;
-                    }
-                    return false;
-                })
+                .filter((measure) -> measure.getQuality() > 10)
+                .filter((measure) -> (measure.getAngle() >= 345 || measure.getAngle() <= 15))
+                .filter((measure) -> measure.getDistance() <= 50)
                 .forEach(System.out::println);
         }
 
@@ -173,9 +164,10 @@ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo
 ### Output
 
 ```
-robot@ev3dev:~$ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo
-2017-03-22 21:47:48 [main] INFO  examples.Demo - Testing RPLidar on a EV3 Brick with Java
-2017-03-22 21:47:48 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Starting a RPLidarA1 instance
+robot@ev3dev:~$ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0-SNAPSHOT.jar examples.Demo
+2017-03-26 20:07:53 [main] INFO  examples.Demo - Testing RPLidar on a EV3 Brick with Java
+2017-03-26 20:07:53 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - Starting a RPLidarA1 instance
+2017-03-26 20:07:53 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - Connecting with: /dev/ttyUSB0
 Opening port /dev/ttyUSB0
 Stable Library
 =========================================
@@ -184,55 +176,43 @@ Java lib Version   = RXTX-2.1-7
 WARNING:  RXTX Version mismatch
 	Jar version = RXTX-2.1-7
 	native lib Version = RXTX-2.2pre2
-2017-03-22 21:47:50 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
-2017-03-22 21:47:50 [main] INFO  examples.Demo - Iteration: 0, Measures: 0
-2017-03-22 21:47:51 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
-2017-03-22 21:47:51 [main] INFO  examples.Demo - Iteration: 1, Measures: 0
-2017-03-22 21:47:52 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
-2017-03-22 21:47:52 [main] INFO  examples.Demo - Iteration: 2, Measures: 292
-2017-03-22 21:47:53 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1005
-2017-03-22 21:47:53 [main] INFO  examples.Demo - Iteration: 3, Measures: 293
-ScanDistance(angle=0, distance=0.0)
-ScanDistance(angle=1, distance=0.0)
-ScanDistance(angle=2, distance=0.0)
-ScanDistance(angle=4, distance=0.0)
-ScanDistance(angle=5, distance=0.0)
-ScanDistance(angle=357, distance=0.0)
-ScanDistance(angle=358, distance=0.0)
-ScanDistance(angle=359, distance=0.0)
-2017-03-22 21:47:54 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
-2017-03-22 21:47:54 [main] INFO  examples.Demo - Iteration: 4, Measures: 288
-ScanDistance(angle=2, distance=0.0)
-ScanDistance(angle=3, distance=0.0)
-ScanDistance(angle=4, distance=0.0)
-ScanDistance(angle=5, distance=0.0)
-ScanDistance(angle=6, distance=0.0)
-ScanDistance(angle=8, distance=0.0)
-ScanDistance(angle=9, distance=0.0)
-ScanDistance(angle=10, distance=0.0)
-ScanDistance(angle=11, distance=0.0)
-ScanDistance(angle=12, distance=0.0)
-2017-03-22 21:47:55 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
-2017-03-22 21:47:55 [main] INFO  examples.Demo - Iteration: 5, Measures: 296
-ScanDistance(angle=0, distance=0.0)
-ScanDistance(angle=349, distance=0.0)
-ScanDistance(angle=353, distance=0.0)
-ScanDistance(angle=355, distance=0.0)
-ScanDistance(angle=356, distance=0.0)
-ScanDistance(angle=358, distance=0.0)
-ScanDistance(angle=359, distance=0.0)
-2017-03-22 21:47:56 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
-2017-03-22 21:47:56 [main] INFO  examples.Demo - Iteration: 6, Measures: 296
-2017-03-22 21:47:57 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
-2017-03-22 21:47:57 [main] INFO  examples.Demo - Iteration: 7, Measures: 297
-2017-03-22 21:47:58 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
-2017-03-22 21:47:58 [main] INFO  examples.Demo - Iteration: 8, Measures: 298
-ScanDistance(angle=375, distance=0.0)
-2017-03-22 21:47:59 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
-2017-03-22 21:47:59 [main] INFO  examples.Demo - Iteration: 9, Measures: 292
-2017-03-22 21:48:00 [main] TRACE e.sensors.slamtec.RPLidarA1Driver - Time consumed: 1004
-2017-03-22 21:48:00 [main] INFO  examples.Demo - Iteration: 10, Measures: 301
-2017-03-22 21:48:00 [main] INFO  examples.Demo - End demo
+2017-03-26 20:07:55 [main] INFO  examples.Demo - Iteration: 0, Measures: 0
+2017-03-26 20:07:56 [main] INFO  examples.Demo - Iteration: 1, Measures: 0
+2017-03-26 20:07:57 [main] INFO  examples.Demo - Iteration: 2, Measures: 295
+ScanDistance(angle=8, distance=31.5, quality=15, start=false)
+ScanDistance(angle=9, distance=30.9, quality=23, start=false)
+ScanDistance(angle=10, distance=30.525, quality=27, start=false)
+ScanDistance(angle=11, distance=30.35, quality=26, start=false)
+ScanDistance(angle=13, distance=30.25, quality=28, start=false)
+ScanDistance(angle=14, distance=30.3, quality=27, start=false)
+ScanDistance(angle=15, distance=30.45, quality=26, start=false)
+2017-03-26 20:07:58 [main] INFO  examples.Demo - Iteration: 3, Measures: 303
+ScanDistance(angle=7, distance=31.85, quality=12, start=false)
+ScanDistance(angle=9, distance=31.05, quality=20, start=false)
+ScanDistance(angle=10, distance=30.65, quality=24, start=false)
+ScanDistance(angle=11, distance=30.325, quality=27, start=false)
+ScanDistance(angle=12, distance=30.25, quality=28, start=false)
+ScanDistance(angle=13, distance=30.25, quality=27, start=false)
+ScanDistance(angle=14, distance=30.25, quality=29, start=false)
+ScanDistance(angle=15, distance=30.425, quality=27, start=false)
+2017-03-26 20:07:59 [main] INFO  examples.Demo - Iteration: 4, Measures: 296
+ScanDistance(angle=7, distance=31.85, quality=11, start=false)
+ScanDistance(angle=9, distance=31.1, quality=20, start=false)
+ScanDistance(angle=10, distance=30.65, quality=25, start=false)
+ScanDistance(angle=11, distance=30.35, quality=29, start=false)
+ScanDistance(angle=12, distance=30.225, quality=26, start=false)
+ScanDistance(angle=13, distance=30.275, quality=26, start=false)
+ScanDistance(angle=15, distance=30.425, quality=27, start=false)
+2017-03-26 20:08:00 [main] INFO  examples.Demo - Iteration: 5, Measures: 288
+ScanDistance(angle=8, distance=31.375, quality=15, start=false)
+ScanDistance(angle=9, distance=30.85, quality=20, start=false)
+ScanDistance(angle=10, distance=30.475, quality=27, start=false)
+ScanDistance(angle=11, distance=30.3, quality=28, start=false)
+ScanDistance(angle=12, distance=30.275, quality=27, start=false)
+ScanDistance(angle=13, distance=30.25, quality=28, start=false)
+ScanDistance(angle=14, distance=30.3, quality=27, start=false)
+ScanDistance(angle=15, distance=30.475, quality=25, start=false)
+2017-03-26 20:08:00 [main] INFO  examples.Demo - End demo
 robot@ev3dev:~$ 
 ```
 

@@ -5,6 +5,7 @@ import ev3dev.sensors.slamtec.model.ScanDistance;
 import ev3dev.sensors.slamtec.service.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
 import java.util.*;
 
 @Slf4j class RPLidarA1Driver implements RPLidarProvider, RpLidarListener {
@@ -18,13 +19,25 @@ import java.util.*;
 
     public RPLidarA1Driver(final String USBPort) {
         this.USBPort = USBPort;
-        log.trace("Starting a RPLidarA1 instance");
+        if(log.isInfoEnabled()){
+            log.info("Starting a RPLidarA1 instance");
+        }
     }
 
     @Override
     public void init() throws RPLidarA1ServiceException {
+        if(log.isInfoEnabled()){
+            log.info("Connecting with: {}", this.USBPort);
+        }
+        File f = new File(this.USBPort);
+        if(!f.exists() || f.isDirectory()) {
+            log.error("This device is not valid: {}", this.USBPort);
+            throw new RPLidarA1ServiceException("This device is not valid: " + this.USBPort);
+        }
+
         try {
             driver = new RpLidarLowLevelDriver(this.USBPort, this);
+        //TODO Improve this Exception handling
         } catch (Exception e) {
             throw new RPLidarA1ServiceException(e);
         }
@@ -36,13 +49,8 @@ import java.util.*;
 
     @Override
     public Scan scan() throws RPLidarA1ServiceException {
-        long startTime = System.currentTimeMillis();
         driver.sendScan(300);
         driver.pause(700);
-        long endTime   = System.currentTimeMillis();
-        long totalTime = endTime - startTime;
-        log.trace("Time consumed: {}", totalTime);
-
         final List<ScanDistance> distances = new ArrayList<>();
         distances.addAll(distancesTemp);
         distancesTemp.clear();
@@ -62,11 +70,12 @@ import java.util.*;
 
         if(!this.closingStatus) {
 
+            //TODO This conversion should be incorporated in RpLidarLowLevelDriver
             int angle = new Double(measurement.angle / 64.0).intValue();
-            double distance = measurement.distance / 4.0;
+            double distance = (measurement.distance / 4.0) / 10.0;
 
             if(!this.containAngle(distancesTemp, angle)){
-                distancesTemp.add(new ScanDistance(angle, distance));
+                distancesTemp.add(new ScanDistance(angle, distance, measurement.quality, measurement.start));
             }
         }
     }

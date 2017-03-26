@@ -3,6 +3,7 @@ package ev3dev.sensors.slamtec.service;
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +16,7 @@ import java.io.OutputStream;
  * @author Peter Abeles
  */
 // TODO wait for responce doesn't appear to be working
-public class RpLidarLowLevelDriver {
+public @Slf4j class RpLidarLowLevelDriver {
 
 	// out going packet types
 	public static final byte SYNC_BYTE0 = (byte) 0xA5;
@@ -377,8 +378,14 @@ public class RpLidarLowLevelDriver {
 
 					Thread.sleep(5);
 				} catch (IOException e) {
+					log.error(e.getLocalizedMessage());
 					e.printStackTrace();
 				} catch (InterruptedException e) {
+					log.error(e.getLocalizedMessage());
+					e.printStackTrace();
+				//TODO Improve this Exception scenario
+				} catch (Exception e){
+					log.error(e.getLocalizedMessage());
 					e.printStackTrace();
 				}
 			}
