@@ -10,12 +10,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Low level service for RP-LIDAR.  Just sends and receives packets.  Doesn't attempt to filter bad data or care about
- * timeouts.
+ * Low level service for RPLidar.
+ * Just sends and receives packets.
+ * Doesn't attempt to filter bad data or care about timeouts.
  *
  * @author Peter Abeles
  */
-// TODO wait for responce doesn't appear to be working
 public @Slf4j class RpLidarLowLevelDriver {
 
 	// out going packet types
@@ -32,7 +32,6 @@ public @Slf4j class RpLidarLowLevelDriver {
 	public static final byte RCV_INFO = (byte) 0x04;
 	public static final byte RCV_HEALTH = (byte) 0x06;
 	public static final byte RCV_SCAN = (byte) 0x81;
-
 
 	SerialPort serialPort;
 	InputStream in;
@@ -66,10 +65,13 @@ public @Slf4j class RpLidarLowLevelDriver {
 	 * @param listener Listener for in comming packets
 	 * @throws Exception
 	 */
-	public RpLidarLowLevelDriver(String portName, RpLidarListener listener) throws Exception {
-		System.out.println("Opening port " + portName);
+	public RpLidarLowLevelDriver(final String portName, final RpLidarListener listener) throws Exception {
+
+		log.info("Opening port " + portName);
 
 		this.listener = listener;
+
+		//Configuration for Serial port operations
 		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
 		CommPort commPort = portIdentifier.open("FOO", 2000);
 		serialPort = (SerialPort) commPort;
@@ -87,6 +89,7 @@ public @Slf4j class RpLidarLowLevelDriver {
 	/**
 	 * Pauses for the specified number of milliseconds
 	 */
+	//TODO Refactor using Delay
 	public void pause(long milli) {
 		synchronized (this) {
 			try {
@@ -103,6 +106,7 @@ public @Slf4j class RpLidarLowLevelDriver {
 
 		serialPort.close();
 
+		//TODO Check by the status of the Thread
 		if (readThread != null) {
 			readThread.requestStop();
 			readThread = null;
@@ -115,7 +119,7 @@ public @Slf4j class RpLidarLowLevelDriver {
 	 * @param timeout Blocking time.  Resends packet periodically.  <= 0 means no blocking.
 	 * @return true if successful
 	 */
-	public boolean sendScan(long timeout) {
+	public boolean sendScan(final long timeout) {
 		return sendBlocking(SCAN, RCV_SCAN, timeout);
 	}
 
@@ -141,7 +145,7 @@ public @Slf4j class RpLidarLowLevelDriver {
 	 * @param timeout Blocking time.  Resends packet periodically.  <= 0 means no blocking.
 	 * @return true if successful
 	 */
-	public boolean sendGetInfo(long timeout) {
+	public boolean sendGetInfo(final long timeout) {
 		return sendBlocking(GET_INFO, RCV_INFO, timeout);
 	}
 
@@ -151,7 +155,7 @@ public @Slf4j class RpLidarLowLevelDriver {
 	 * @param timeout Blocking time.  Resends packet periodically.  <= 0 means no blocking.
 	 * @return true if successful
 	 */
-	public boolean sendGetHealth(long timeout) {
+	public boolean sendGetHealth(final long timeout) {
 		return sendBlocking(GET_HEALTH, RCV_HEALTH, timeout);
 	}
 
@@ -178,7 +182,7 @@ public @Slf4j class RpLidarLowLevelDriver {
 	 */
 	protected void sendNoPayLoad(byte command) {
 		if (verbose) {
-			System.out.printf("Sending command 0x%02x\n", command & 0xFF);
+			log.debug("Sending command 0x%02x\n", command & 0xFF);
 		}
 
 		dataOut[0] = SYNC_BYTE0;
@@ -188,6 +192,8 @@ public @Slf4j class RpLidarLowLevelDriver {
 			out.write(dataOut, 0, 2);
 			out.flush();
 		} catch (IOException e) {
+			log.error(e.getLocalizedMessage());
+			//TODO Think in a Low Level exception
 			e.printStackTrace();
 		}
 	}
@@ -200,11 +206,11 @@ public @Slf4j class RpLidarLowLevelDriver {
 		int offset = 0;
 
 		if (verbose) {
-			System.out.println("parseData length = " + length);
+			StringBuilder sb = new StringBuilder("parseData length = ").append(length);
 			for (int i = 0; i < length; i++) {
-				System.out.printf("%02x ", (data[i] & 0xFF));
+				sb.append("%02x ").append(data[i] & 0xFF);
 			}
-			System.out.println();
+			log.debug(sb.toString());
 		}
 
 		// search for the first good packet it can find
@@ -218,7 +224,7 @@ public @Slf4j class RpLidarLowLevelDriver {
 					offset += 5;
 				} else {
 					if( verbose )
-						System.out.println("--- Bad Packet ---");
+						log.debug("--- Bad Packet ---");
 					offset += 1;
 				}
 			} else {
@@ -238,12 +244,12 @@ public @Slf4j class RpLidarLowLevelDriver {
 					byte dataType = data[offset + 6];
 
 					if (verbose) {
-						System.out.printf("packet 0x%02x length = %d\n", dataType, packetLength);
+						log.debug("packet 0x%02x length = %d\n", dataType, packetLength);
 					}
 					// see if it has received the entire packet
 					if (offset + 2 + 5 + packetLength > length) {
 						if (verbose) {
-							System.out.println("  waiting for rest of the packet");
+							log.debug("  waiting for rest of the packet");
 						}
 						return offset;
 					}
@@ -276,14 +282,14 @@ public @Slf4j class RpLidarLowLevelDriver {
 				}
 				break;
 			default:
-				System.out.printf("Unknown packet type = 0x%02x\n", type);
+				log.debug("Unknown packet type = 0x%02x\n", type);
 		}
 		return false;
 	}
 
 	protected boolean parseHealth(byte[] data, int offset, int length) {
 		if (length != 3) {
-			System.out.println("  bad health packet");
+			log.debug("  bad health packet");
 			return false;
 		}
 
@@ -296,7 +302,7 @@ public @Slf4j class RpLidarLowLevelDriver {
 
 	protected boolean parseDeviceInfo(byte[] data, int offset, int length) {
 		if (length != 20) {
-			System.out.println("  bad device info");
+			log.debug("  bad device info");
 			return false;
 		}
 

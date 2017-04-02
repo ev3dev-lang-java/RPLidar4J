@@ -10,16 +10,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public  @Slf4j class RPLidarA1FakeTests {
+public @Slf4j class RPLidarA1FakeTests {
 
 	@BeforeClass
 	public static void runOnceBeforeClass() {
 		System.setProperty("FAKE_RPLIDARA1", "true");
 	}
 
-
 	@Test
-	@Ignore("Stream usage")
 	public void getDistanceStreamTest() throws Exception {
 
 		final String USBPort = "ttyUSB0";

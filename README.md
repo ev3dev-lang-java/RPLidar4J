@@ -28,12 +28,6 @@ the following figure:
 - [datasheet-rplidar](./docs/sdk/datasheet-rplidar.pdf)
 - [communication-protocol](./docs/rpk-02-communication-protocol.pdf)
 
-
-## TODO
-
-- Add LeJOS Sensor support
-- Add Mock support
-
 ## Getting Started
 
 ### Connect the sensor on your robot
@@ -219,4 +213,16 @@ robot@ev3dev:~$
 ## UML Design
 
 ![](./docs/uml/graph.png)
+
+
+## TODO
+
+- Improve the Design solution
+- Refactor Service layer
+- Add Event-based support
+- Develop a ROS node for RPLidar A1
+- Add LeJOS Sensor support
+- Add RPLidarA2 support
+- Add Mock test
+
 
