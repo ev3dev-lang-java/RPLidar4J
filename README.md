@@ -104,7 +104,7 @@ To use this project, import the library as a Maven dependency.
 </dependency>
 ```
 
-Further information: https://jitpack.io/#ev3dev-lang-java/RPLidar4J/v0.1.0
+Further information: https://jitpack.io/#ev3dev-lang-java/RPLidar4J/v0.2.0
 
 ### Using the sensor
 
