@@ -1,6 +1,6 @@
 /**
- * Low level Serial port development.
+ * Low level Serial port development with the sensor RPLidarA1.
  *
- * Basically is a fork from the development by Peter Abeles
+ * A fork from the development by Peter Abeles
  */
 package ev3dev.sensors.slamtec.service;

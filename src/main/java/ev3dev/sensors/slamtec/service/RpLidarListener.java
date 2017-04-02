@@ -7,9 +7,9 @@ package ev3dev.sensors.slamtec.service;
  */
 public interface RpLidarListener {
 
-	public void handleMeasurement(RpLidarMeasurement measurement);
+	void handleMeasurement(RpLidarMeasurement measurement);
 
-	public void handleDeviceHealth(RpLidarHeath health);
+	void handleDeviceHealth(RpLidarHeath health);
 
-	public void handleDeviceInfo(RpLidarDeviceInfo info);
+	void handleDeviceInfo(RpLidarDeviceInfo info);
 }

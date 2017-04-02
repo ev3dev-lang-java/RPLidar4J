@@ -6,6 +6,7 @@ package ev3dev.sensors.slamtec.service;
  * @author Peter Abeles
  */
 public class RpLidarMeasurement {
+
 	public boolean start;
 	public int quality;
 	public int angle;
