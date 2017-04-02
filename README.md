@@ -100,7 +100,7 @@ To use this project, import the library as a Maven dependency.
 <dependency>
     <groupId>com.github.ev3dev-lang-java</groupId>
     <artifactId>RPLidar4J</artifactId>
-    <version>v0.1.0</version>
+    <version>v0.2.0</version>
 </dependency>
 ```
 
