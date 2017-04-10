@@ -32,4 +32,14 @@ public @Slf4j class RPLidarA1 implements RPLidarProvider {
     public void close() throws RPLidarA1ServiceException {
         rpLidarProvider.close();
     }
+
+    @Override
+    public void addListener(RPLidarProviderListener listener) {
+        rpLidarProvider.addListener(listener);
+    }
+
+    @Override
+    public void removeListener(RPLidarProviderListener listener) {
+        rpLidarProvider.removeListener(listener);
+    }
 }

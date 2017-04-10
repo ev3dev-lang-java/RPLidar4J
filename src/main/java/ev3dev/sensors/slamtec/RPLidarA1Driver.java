@@ -6,7 +6,10 @@ import ev3dev.sensors.slamtec.service.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Slf4j class RPLidarA1Driver implements RPLidarProvider, RpLidarListener {
 
@@ -63,6 +66,16 @@ import java.util.*;
         closingStatus = true;
         driver.shutdown();
         driver.pause(100);
+    }
+
+    @Override
+    public void addListener(RPLidarProviderListener listener) {
+
+    }
+
+    @Override
+    public void removeListener(RPLidarProviderListener listener) {
+
     }
 
     @Override
