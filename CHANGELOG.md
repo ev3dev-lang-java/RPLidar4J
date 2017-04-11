@@ -1,5 +1,9 @@
 # RPLidar4J Changelog
 
+## RPLidar4J v0.3.0-SNAPSHOT 04/11/2017
+
+- Adding RPLidarProviderListener
+
 ## RPLidar4J v0.2.0 04/02/2017
 
 - Adding Javadocs
