@@ -10,18 +10,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j class RPLidarA1Driver implements RPLidarProvider, RpLidarListener {
 
-    private boolean closingStatus = false;
+    private AtomicBoolean closingStatus;
 
     private RpLidarLowLevelDriver driver;
     private final String USBPort;
 
+    private int counter = 0;
+    private boolean flag = false;
     private List<ScanDistance> distancesTemp = Collections.synchronizedList(new ArrayList<>());
+    private Scan scan;
+
+    private final List<RPLidarProviderListener> listenerList = Collections.synchronizedList(new ArrayList());
 
     public RPLidarA1Driver(final String USBPort) {
         this.USBPort = USBPort;
+        this.closingStatus = new AtomicBoolean(false);
         if(log.isInfoEnabled()){
             log.info("Starting a RPLidarA1 instance");
         }
@@ -29,6 +36,7 @@ import java.util.List;
 
     @Override
     public void init() throws RPLidarA1ServiceException {
+
         if(log.isInfoEnabled()){
             log.info("Connecting with: {}", this.USBPort);
         }
@@ -44,7 +52,7 @@ import java.util.List;
         } catch (Exception e) {
             throw new RPLidarA1ServiceException(e);
         }
-        closingStatus = false;
+        closingStatus = new AtomicBoolean(false);
         driver.setVerbose(false);
         driver.sendReset();
         driver.pause(200);
@@ -54,43 +62,85 @@ import java.util.List;
     public Scan scan() throws RPLidarA1ServiceException {
         driver.sendScan(300);
         driver.pause(700);
+
         final List<ScanDistance> distances = new ArrayList<>();
-        distances.addAll(distancesTemp);
-        distancesTemp.clear();
+        synchronized(distancesTemp){
+            distances.addAll(distancesTemp);
+            distancesTemp.clear();
+        }
         distances.sort(Comparator.comparing(ScanDistance::getAngle));
         return new Scan(Collections.unmodifiableList(distances));
     }
 
     @Override
     public void close() throws RPLidarA1ServiceException {
-        closingStatus = true;
+        closingStatus = new AtomicBoolean(true);
         driver.shutdown();
         driver.pause(100);
     }
 
     @Override
     public void addListener(RPLidarProviderListener listener) {
-
+        listenerList.add(listener);
     }
 
     @Override
     public void removeListener(RPLidarProviderListener listener) {
-
+        listenerList.remove(listener);
     }
 
+//    @Override
+//    public void handleMeasurement(RpLidarMeasurement measurement) {
+//
+//        if(!this.closingStatus) {
+//
+//            //TODO This conversion should be incorporated in RpLidarLowLevelDriver
+//            int angle = new Double(measurement.angle / 64.0).intValue();
+//            double distance = (measurement.distance / 4.0) / 10.0;
+//
+//            if(!this.containAngle(distancesTemp, angle)){
+//                distancesTemp.add(new ScanDistance(angle, distance, measurement.quality, measurement.start));
+//            }
+//        }
+//    }
+
     @Override
-    public void handleMeasurement(RpLidarMeasurement measurement) {
+    public void handleMeasurement(final RpLidarMeasurement measurement) {
 
-        if(!this.closingStatus) {
+        if(!closingStatus.get()){
 
-            //TODO This conversion should be incorporated in RpLidarLowLevelDriver
-            int angle = new Double(measurement.angle / 64.0).intValue();
-            double distance = (measurement.distance / 4.0) / 10.0;
+            if(flag){
+                if(measurement.start){
+                    log.trace("{}", counter);
+                    synchronized (distancesTemp) {
+                        final List<ScanDistance> distances = new ArrayList<>();
+                        distances.addAll(distancesTemp);
+                        distancesTemp.clear();
+                        scan = new Scan(distances);
 
-            if(!this.containAngle(distancesTemp, angle)){
+                        for (RPLidarProviderListener listener : listenerList) {
+                            listener.scanFinished(new Scan(distances));
+                        }
+
+                    }
+
+                    counter= 0;
+                    flag=false;
+                }
+            }
+
+            if (measurement.start) {
+                flag = true;
+            }
+
+            if(flag){
+                counter++;
+                int angle = new Double(measurement.angle / 64.0).intValue();
+                double distance = (measurement.distance / 4.0) / 10.0;
                 distancesTemp.add(new ScanDistance(angle, distance, measurement.quality, measurement.start));
             }
         }
+
     }
 
     public boolean containAngle(final List<ScanDistance> list, final int angle){

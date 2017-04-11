@@ -5,9 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public @Slf4j class RPLidarA1FakeEventsTests implements RPLidarProviderListener {
 
-	@BeforeClass
+    @BeforeClass
 	public static void runOnceBeforeClass() {
 		System.setProperty("FAKE_RPLIDARA1", "true");
 	}
@@ -24,6 +26,34 @@ public @Slf4j class RPLidarA1FakeEventsTests implements RPLidarProviderListener 
         log.info("End");
         System.exit(0);
 	}
+
+    @Test
+    public void lidarEventTest2() throws Exception {
+
+        final String USBPort = "ttyUSB0";
+        final RPLidarA1 lidar = new RPLidarA1(USBPort);
+        lidar.addListener(new RPLidarProviderListener() {
+
+            @Override
+            public Scan scanFinished(Scan scan) {
+                log.info("Measures: {}", scan.getDistances().size());
+                scan.getDistances()
+                        .stream()
+                        .filter((measure) -> measure.getQuality() > 10)
+                        .filter((measure) -> (measure.getAngle() >= 345 || measure.getAngle() <= 15))
+                        .filter((measure) -> measure.getDistance() <= 50)
+                        .forEach(System.out::println);
+                return scan;
+            }
+        });
+        lidar.init();
+        Thread.sleep(2000);
+        lidar.close();
+        log.info("End");
+        System.exit(0);
+    }
+
+
 
     @Override
     public Scan scanFinished(final Scan scan) {
