@@ -7,7 +7,7 @@ import ev3dev.sensors.slamtec.model.Scan;
  */
 public interface RPLidarProviderListener {
 
-    Scan scanFinished(Scan scan);
+    void scanFinished(Scan scan);
 
 }
 

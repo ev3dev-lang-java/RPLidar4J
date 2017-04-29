@@ -19,7 +19,7 @@ public @Slf4j class Demo3 {
         lidar.init();
         lidar.addListener(new RPLidarProviderListener() {
             @Override
-            public Scan scanFinished(Scan scan) {
+            public void scanFinished(Scan scan) {
                 //log.info("Iteration: {}, Measures: {}", counter.incrementAndGet(), scan.getDistances().size());
                 log.info("Measures: {}", scan.getDistances().size());
                 scan.getDistances()
@@ -28,7 +28,6 @@ public @Slf4j class Demo3 {
                         .filter((measure) -> (measure.getAngle() >= 345 || measure.getAngle() <= 15))
                         .filter((measure) -> measure.getDistance() <= 50)
                         .forEach(System.out::println);
-                return scan;
             }
         });
         for(int x = 0; x <= 10; x++) {
