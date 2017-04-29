@@ -1,5 +1,4 @@
 Manifest-Version: 1.0
 Implementation-Title: RPLIDAR4J
-Implementation-Version: 0.2.0
+Implementation-Version: 0.3.2
 Implementation-Vendor: Juan Antonio Breña Moral
-Main-Class: examples.Demo3
