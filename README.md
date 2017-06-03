@@ -221,7 +221,6 @@ robot@ev3dev:~$
 
 - Improve the Design solution
 - Refactor Service layer
-- Add Event-based support
 - Develop a ROS node for RPLidar A1
 - Add LeJOS Sensor support
 - Add RPLidarA2 support
