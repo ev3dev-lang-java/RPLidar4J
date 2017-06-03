@@ -9,4 +9,7 @@ public interface RPLidarProvider {
     void init() throws RPLidarA1ServiceException;
     Scan scan() throws RPLidarA1ServiceException;
     void close() throws RPLidarA1ServiceException;
+
+    void addListener(RPLidarProviderListener listener);
+    void removeListener(RPLidarProviderListener listener);
 }

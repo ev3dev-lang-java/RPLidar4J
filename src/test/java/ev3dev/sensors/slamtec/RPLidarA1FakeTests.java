@@ -3,12 +3,12 @@ package ev3dev.sensors.slamtec;
 import ev3dev.sensors.slamtec.model.Scan;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 public @Slf4j class RPLidarA1FakeTests {
 
@@ -39,6 +39,7 @@ public @Slf4j class RPLidarA1FakeTests {
 		lidar.close();
 
 		assertThat(scan, is(notNullValue()));
-		assertThat(scan.getDistances().size(), is(RPLidarProvider.SCAN_DEGREES));
+		assertThat(scan.getDistances().size(), is(lessThanOrEqualTo(RPLidarProvider.SCAN_DEGREES)));
 	}
+
 }

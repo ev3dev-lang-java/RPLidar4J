@@ -1,7 +1,6 @@
 package examples;
 
 import ev3dev.sensors.slamtec.RPLidarA1;
-import ev3dev.sensors.slamtec.model.Scan;
 import lombok.extern.slf4j.Slf4j;
 
 public @Slf4j class Demo2 {

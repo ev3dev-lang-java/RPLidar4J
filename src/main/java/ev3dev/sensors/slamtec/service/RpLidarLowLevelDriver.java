@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Low level service for RPLidar.
@@ -72,8 +73,8 @@ public @Slf4j class RpLidarLowLevelDriver {
 		this.listener = listener;
 
 		//Configuration for Serial port operations
-		CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
-		CommPort commPort = portIdentifier.open("FOO", 2000);
+		final CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
+		final CommPort commPort = portIdentifier.open("FOO", 2000);
 		serialPort = (SerialPort) commPort;
 		serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 		serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
@@ -357,16 +358,24 @@ public @Slf4j class RpLidarLowLevelDriver {
 
 		byte data[] = new byte[1024 * 2];
 		int size = 0;
-		volatile boolean run = true;
 
-		public void requestStop() {
-			run = false;
+		private AtomicBoolean run;
+
+		public ReadSerialThread(){
+			run = new AtomicBoolean(true);
+		}
+
+		public synchronized void requestStop() {
+			run = new AtomicBoolean(false);
 		}
 
 		@Override
 		public void run() {
-			while (run) {
+
+			while (run.get()) {
+
 				try {
+
 					if (in.available() > 0) {
 						int totalRead = in.read(data, size, data.length - size);
 
@@ -379,7 +388,6 @@ public @Slf4j class RpLidarLowLevelDriver {
 							data[i] = data[i + used];
 						}
 						size -= used;
-
 					}
 
 					Thread.sleep(5);

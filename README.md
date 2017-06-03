@@ -2,6 +2,8 @@
 
 RPLidar4J, is a Java library designed to manage the sensor [RPLidar A1](http://www.slamtec.com/en/Lidar), a 2D LIDAR sensor in a easy way.
 
+[![Dependency Status](https://www.versioneye.com/user/projects/59046737e57fd5003857a94f/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/59046737e57fd5003857a94f)
+
 ![](./docs/images/all_RPLidarA1.jpg)
 
 # The sensor
@@ -219,7 +221,6 @@ robot@ev3dev:~$
 
 - Improve the Design solution
 - Refactor Service layer
-- Add Event-based support
 - Develop a ROS node for RPLidar A1
 - Add LeJOS Sensor support
 - Add RPLidarA2 support
