@@ -62,7 +62,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
     public Scan scan() throws RPLidarA1ServiceException {
         //for v2 only - I guess this command is ignored by v1
         driver.sendStartMotor(660);
-        
+
         driver.sendScan(300);
         driver.pause(700);
 
