@@ -252,6 +252,13 @@ public @Slf4j class RpLidarLowLevelDriver {
 	}
 
 	/**
+	 * Sends a stop motor command
+	 */
+	public void sendStopMotor() {
+		sendPayLoad(START_MOTOR, 0);
+	}
+
+	/**
 	 * Searches for and parses all complete packets inside data
 	 */
 	protected int parseData(byte[] data, int length) {

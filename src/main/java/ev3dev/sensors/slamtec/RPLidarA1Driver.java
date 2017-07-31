@@ -78,6 +78,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
     @Override
     public void close() throws RPLidarA1ServiceException {
         closingStatus = new AtomicBoolean(true);
+        driver.sendStopMotor();
         driver.shutdown();
         driver.pause(100);
     }
