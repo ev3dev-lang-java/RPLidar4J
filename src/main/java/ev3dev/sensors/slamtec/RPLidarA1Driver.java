@@ -55,13 +55,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
         closingStatus = new AtomicBoolean(false);
         driver.setVerbose(false);
         driver.sendReset();
+
+        //for v2 only - I guess this command is ignored by v1
+        driver.sendStartMotor(660);
+
         driver.pause(200);
     }
 
     @Override
     public Scan scan() throws RPLidarA1ServiceException {
-        //for v2 only - I guess this command is ignored by v1
-        driver.sendStartMotor(660);
 
         driver.sendScan(300);
         driver.pause(700);
@@ -139,8 +141,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
             if(flag){
                 counter++;
-                int angle = new Double(measurement.angle / 64.0).intValue();
-                double distance = (measurement.distance / 4.0) / 10.0;
+                int angle = new Float(measurement.angle / 64.0f).intValue();
+                float distance = (measurement.distance / 4.0f) / 10.0f;
                 distancesTemp.add(new ScanDistance(angle, distance, measurement.quality, measurement.start));
             }
         }
