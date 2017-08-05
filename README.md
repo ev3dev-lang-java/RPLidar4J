@@ -1,6 +1,6 @@
 # RPLidar4J
 
-RPLidar4J, is a Java library designed to manage the sensor [RPLidar A1](http://www.slamtec.com/en/Lidar), a 2D LIDAR sensor in a easy way.
+RPLidar4J, is a Java library designed to manage the sensors [RPLidar A1 & RPLIDAR A2](http://www.slamtec.com/en/Lidar), a 2D LIDAR sensor in a easy way.
 
 [![Dependency Status](https://www.versioneye.com/user/projects/59046737e57fd5003857a94f/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/59046737e57fd5003857a94f)
 
@@ -23,7 +23,7 @@ the rotating center of the range scanner core. The rotation angle
 increases as rotating clockwise. The detailed definition is shown in 
 the following figure:
 
-![](./docs/images/rplidar_A1.png)
+![](./docs/images/rplidar_A2.png)
 
 **Technical docs:**
 
@@ -34,7 +34,7 @@ the following figure:
 
 ### Connect the sensor on your robot
 
-If you adquire the RPLidarA1 Kit, the sensor includes in the Kit a small
+If you adquire a kit, the sensor includes a small
 USB Controller. Connect plug the sensor with the USB Controller. 
 Later, connect the USB Controller to your favourite Brick (EV3, BrickPi+ & PiStorms)
 You should notice that the brick turn on the USB Controller and 
@@ -102,11 +102,11 @@ To use this project, import the library as a Maven dependency.
 <dependency>
     <groupId>com.github.ev3dev-lang-java</groupId>
     <artifactId>RPLidar4J</artifactId>
-    <version>v0.2.0</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
-Further information: https://jitpack.io/#ev3dev-lang-java/RPLidar4J/v0.2.0
+Further information: https://jitpack.io/#ev3dev-lang-java/RPLidar4J/0.4.0
 
 ### Using the sensor
 
@@ -154,63 +154,201 @@ and deploy on your Brick using some Plugin for Maven or Gradle.
 To run the example this the command:
 
 ```
-java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo
+java -Djava.library.path=/usr/lib/jni/ -jar /home/robot/RPLidar4J-all-0.4.0.jar
 ```
 
 ### Output
 
+Example using RPLIDAR A2:
+
 ```
-robot@ev3dev:~$ java -Djava.library.path=/usr/lib/jni/ -cp RPLidar4J-all-0.1.0.jar examples.Demo
-2017-03-26 20:07:53 [main] INFO  examples.Demo - Testing RPLidar on a EV3 Brick with Java
-2017-03-26 20:07:53 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - Starting a RPLidarA1 instance
-2017-03-26 20:07:53 [main] INFO  e.sensors.slamtec.RPLidarA1Driver - Connecting with: /dev/ttyUSB0
-Opening port /dev/ttyUSB0
-Stable Library
-=========================================
-Native lib Version = RXTX-2.2pre2
-Java lib Version   = RXTX-2.1-7
-WARNING:  RXTX Version mismatch
-	Jar version = RXTX-2.1-7
-	native lib Version = RXTX-2.2pre2
-2017-03-26 20:07:55 [main] INFO  examples.Demo - Iteration: 0, Measures: 0
-2017-03-26 20:07:56 [main] INFO  examples.Demo - Iteration: 1, Measures: 0
-2017-03-26 20:07:57 [main] INFO  examples.Demo - Iteration: 2, Measures: 295
-ScanDistance(angle=8, distance=31.5, quality=15, start=false)
-ScanDistance(angle=9, distance=30.9, quality=23, start=false)
-ScanDistance(angle=10, distance=30.525, quality=27, start=false)
-ScanDistance(angle=11, distance=30.35, quality=26, start=false)
-ScanDistance(angle=13, distance=30.25, quality=28, start=false)
-ScanDistance(angle=14, distance=30.3, quality=27, start=false)
-ScanDistance(angle=15, distance=30.45, quality=26, start=false)
-2017-03-26 20:07:58 [main] INFO  examples.Demo - Iteration: 3, Measures: 303
-ScanDistance(angle=7, distance=31.85, quality=12, start=false)
-ScanDistance(angle=9, distance=31.05, quality=20, start=false)
-ScanDistance(angle=10, distance=30.65, quality=24, start=false)
-ScanDistance(angle=11, distance=30.325, quality=27, start=false)
-ScanDistance(angle=12, distance=30.25, quality=28, start=false)
-ScanDistance(angle=13, distance=30.25, quality=27, start=false)
-ScanDistance(angle=14, distance=30.25, quality=29, start=false)
-ScanDistance(angle=15, distance=30.425, quality=27, start=false)
-2017-03-26 20:07:59 [main] INFO  examples.Demo - Iteration: 4, Measures: 296
-ScanDistance(angle=7, distance=31.85, quality=11, start=false)
-ScanDistance(angle=9, distance=31.1, quality=20, start=false)
-ScanDistance(angle=10, distance=30.65, quality=25, start=false)
-ScanDistance(angle=11, distance=30.35, quality=29, start=false)
-ScanDistance(angle=12, distance=30.225, quality=26, start=false)
-ScanDistance(angle=13, distance=30.275, quality=26, start=false)
-ScanDistance(angle=15, distance=30.425, quality=27, start=false)
-2017-03-26 20:08:00 [main] INFO  examples.Demo - Iteration: 5, Measures: 288
-ScanDistance(angle=8, distance=31.375, quality=15, start=false)
-ScanDistance(angle=9, distance=30.85, quality=20, start=false)
-ScanDistance(angle=10, distance=30.475, quality=27, start=false)
-ScanDistance(angle=11, distance=30.3, quality=28, start=false)
-ScanDistance(angle=12, distance=30.275, quality=27, start=false)
-ScanDistance(angle=13, distance=30.25, quality=28, start=false)
-ScanDistance(angle=14, distance=30.3, quality=27, start=false)
-ScanDistance(angle=15, distance=30.475, quality=25, start=false)
-2017-03-26 20:08:00 [main] INFO  examples.Demo - End demo
-robot@ev3dev:~$ 
+java -Djava.library.path=/usr/lib/jni/ -jar /home/robot/RPLidar4J-all-0.4.0.jar
+ev3dev#3|17:05:12.652 [main] INFO examples.Demo4 - Testing RPLidar on a EV3Dev with Java
+ev3dev#3|17:05:13.075 [main] INFO ev3dev.sensors.slamtec.RPLidarA1Driver - Starting a RPLidarA1 instance
+ev3dev#3|17:05:13.086 [main] INFO ev3dev.sensors.slamtec.RPLidarA1Driver - Connecting with: /dev/ttyUSB0
+ev3dev#3|17:05:13.392 [main] INFO ev3dev.sensors.slamtec.service.RpLidarLowLevelDriver - Opening port /dev/ttyUSB0
+ev3dev#3|Stable Library
+ev3dev#3|=========================================
+ev3dev#3|Native lib Version = RXTX-2.2pre2
+ev3dev#3|Java lib Version   = RXTX-2.1-7
+ev3dev#3|WARNING:  RXTX Version mismatch
+ev3dev#3|	Jar version = RXTX-2.1-7
+ev3dev#3|	native lib Version = RXTX-2.2pre2
+ev3dev#3|17:05:16.813 [Thread-1] INFO examples.Demo4 - Measures: 51
+ev3dev#3|17:05:16.854 [Thread-1] INFO examples.Demo4 - Measures: 2
+ev3dev#3|17:05:17.012 [Thread-1] INFO examples.Demo4 - Measures: 311
+ev3dev#3|17:05:17.137 [Thread-1] INFO examples.Demo4 - Measures: 289
+ev3dev#3|17:05:17.282 [Thread-1] INFO examples.Demo4 - Measures: 271
+ev3dev#3|17:05:17.394 [Thread-1] INFO examples.Demo4 - Measures: 257
+ev3dev#3|17:05:17.522 [Thread-1] INFO examples.Demo4 - Measures: 246
+ev3dev#3|17:05:17.675 [Thread-1] INFO examples.Demo4 - Measures: 236
+ev3dev#3|17:05:17.782 [Thread-1] INFO examples.Demo4 - Measures: 228
+ev3dev#3|17:05:17.893 [Thread-1] INFO examples.Demo4 - Measures: 223
+ev3dev#3|17:05:18.001 [Thread-1] INFO examples.Demo4 - Measures: 216
+ev3dev#3|17:05:18.092 [Thread-1] INFO examples.Demo4 - Measures: 212
+ev3dev#3|17:05:18.184 [Thread-1] INFO examples.Demo4 - Measures: 208
+ev3dev#3|17:05:18.256 [Thread-1] INFO examples.Demo4 - Measures: 204
+ev3dev#3|17:05:18.337 [Thread-1] INFO examples.Demo4 - Measures: 199
+ev3dev#3|17:05:18.404 [Thread-1] INFO examples.Demo4 - Measures: 197
+ev3dev#3|17:05:18.479 [Thread-1] INFO examples.Demo4 - Measures: 194
+ev3dev#3|17:05:18.570 [Thread-1] INFO examples.Demo4 - Measures: 191
+ev3dev#3|17:05:18.657 [Thread-1] INFO examples.Demo4 - Measures: 191
+ev3dev#3|17:05:18.751 [Thread-1] INFO examples.Demo4 - Measures: 188
+ev3dev#3|17:05:18.781 [Thread-1] INFO examples.Demo4 - Measures: 80
+ev3dev#3|17:05:18.814 [Thread-1] INFO examples.Demo4 - Measures: 107
+ev3dev#3|17:05:18.842 [Thread-1] INFO examples.Demo4 - Measures: 186
+ev3dev#3|17:05:18.929 [Thread-1] INFO examples.Demo4 - Measures: 183
+ev3dev#3|17:05:19.006 [Thread-1] INFO examples.Demo4 - Measures: 180
+ev3dev#3|17:05:19.057 [Thread-1] INFO examples.Demo4 - Measures: 53
+ev3dev#3|17:05:19.107 [Thread-1] INFO examples.Demo4 - Measures: 125
+ev3dev#3|17:05:19.203 [Thread-1] INFO examples.Demo4 - Measures: 178
+ev3dev#3|17:05:19.282 [Thread-1] INFO examples.Demo4 - Measures: 138
+ev3dev#3|17:05:19.301 [Thread-1] INFO examples.Demo4 - Measures: 1
+ev3dev#3|17:05:19.317 [Thread-1] INFO examples.Demo4 - Measures: 1
+ev3dev#3|17:05:19.337 [Thread-1] INFO examples.Demo4 - Measures: 36
+ev3dev#3|17:05:19.381 [Thread-1] INFO examples.Demo4 - Measures: 177
+ev3dev#3|17:05:19.463 [Thread-1] INFO examples.Demo4 - Measures: 176
+ev3dev#3|17:05:19.508 [Thread-1] INFO examples.Demo4 - Measures: 64
+ev3dev#3|17:05:19.538 [Thread-1] INFO examples.Demo4 - Measures: 50
+ev3dev#3|17:05:19.551 [Thread-1] INFO examples.Demo4 - Measures: 1
+ev3dev#3|17:05:19.578 [Thread-1] INFO examples.Demo4 - Measures: 58
+ev3dev#3|17:05:19.639 [Thread-1] INFO examples.Demo4 - Measures: 175
+ev3dev#3|17:05:19.662 [Thread-1] INFO examples.Demo4 - Measures: 18
+ev3dev#3|17:05:19.739 [Thread-1] INFO examples.Demo4 - Measures: 156
+ev3dev#3|17:05:19.815 [Thread-1] INFO examples.Demo4 - Measures: 174
+ev3dev#3|17:05:20.001 [Thread-1] INFO examples.Demo4 - Measures: 326
+ev3dev#3|17:05:20.022 [Thread-1] INFO examples.Demo4 - Measures: 20
+ev3dev#3|17:05:20.078 [Thread-1] INFO examples.Demo4 - Measures: 174
+ev3dev#3|17:05:20.173 [Thread-1] INFO examples.Demo4 - Measures: 172
+ev3dev#3|17:05:20.250 [Thread-1] INFO examples.Demo4 - Measures: 172
+ev3dev#3|17:05:20.353 [Thread-1] INFO examples.Demo4 - Measures: 172
+ev3dev#3|17:05:20.431 [Thread-1] INFO examples.Demo4 - Measures: 171
+ev3dev#3|17:05:20.587 [Thread-1] INFO examples.Demo4 - Measures: 174
+ev3dev#3|17:05:20.640 [Thread-1] INFO examples.Demo4 - Measures: 173
+ev3dev#3|17:05:20.690 [Thread-1] INFO examples.Demo4 - Measures: 172
+ev3dev#3|17:05:20.763 [Thread-1] INFO examples.Demo4 - Measures: 117
+ev3dev#3|17:05:20.791 [Thread-1] INFO examples.Demo4 - Measures: 54
+ev3dev#3|17:05:20.863 [Thread-1] INFO examples.Demo4 - Measures: 172
+ev3dev#3|17:05:20.944 [Thread-1] INFO examples.Demo4 - Measures: 170
+ev3dev#3|17:05:21.043 [Thread-1] INFO examples.Demo4 - Measures: 170
+ev3dev#3|17:05:21.119 [Thread-1] INFO examples.Demo4 - Measures: 172
+ev3dev#3|17:05:21.222 [Thread-1] INFO examples.Demo4 - Measures: 169
+ev3dev#3|17:05:21.299 [Thread-1] INFO examples.Demo4 - Measures: 172
+ev3dev#3|17:05:21.382 [Thread-1] INFO examples.Demo4 - Measures: 171
+ev3dev#3|17:05:21.427 [Thread-1] INFO examples.Demo4 - Measures: 61
+ev3dev#3|17:05:21.477 [Thread-1] INFO examples.Demo4 - Measures: 109
+ev3dev#3|17:05:21.531 [Thread-1] INFO examples.Demo4 - Measures: 92
+ev3dev#3|17:05:21.561 [Thread-1] INFO examples.Demo4 - Measures: 80
+ev3dev#3|17:05:21.651 [Thread-1] INFO examples.Demo4 - Measures: 172
+ev3dev#3|17:05:21.702 [Thread-1] INFO examples.Demo4 - Measures: 87
+ev3dev#3|17:05:21.729 [Thread-1] INFO examples.Demo4 - Measures: 83
+ev3dev#3|17:05:21.827 [Thread-1] INFO examples.Demo4 - Measures: 169
+ev3dev#3|17:05:21.842 [Thread-1] INFO examples.Demo4 - Measures: 1
+ev3dev#3|17:05:21.863 [Thread-1] INFO examples.Demo4 - Measures: 1
+ev3dev#3|17:05:21.903 [Thread-1] INFO examples.Demo4 - Measures: 172
+ev3dev#3|17:05:21.983 [Thread-1] INFO examples.Demo4 - Measures: 171
 ```
+
+Example using RPLIDAR A1:
+
+```
+java -Djava.library.path=/usr/lib/jni/ -jar /home/robot/RPLidar4J-all-0.4.0.jar
+ev3dev#5|17:09:45.943 [main] INFO examples.Demo4 - Testing RPLidar on a EV3Dev with Java
+ev3dev#5|17:09:46.377 [main] INFO ev3dev.sensors.slamtec.RPLidarA1Driver - Starting a RPLidarA1 instance
+ev3dev#5|17:09:46.388 [main] INFO ev3dev.sensors.slamtec.RPLidarA1Driver - Connecting with: /dev/ttyUSB1
+ev3dev#5|17:09:46.678 [main] INFO ev3dev.sensors.slamtec.service.RpLidarLowLevelDriver - Opening port /dev/ttyUSB1
+ev3dev#5|Stable Library
+ev3dev#5|=========================================
+ev3dev#5|Native lib Version = RXTX-2.2pre2
+ev3dev#5|Java lib Version   = RXTX-2.1-7
+ev3dev#5|WARNING:  RXTX Version mismatch
+ev3dev#5|	Jar version = RXTX-2.1-7
+ev3dev#5|	native lib Version = RXTX-2.2pre2
+ev3dev#5|17:09:50.197 [Thread-1] INFO examples.Demo4 - Measures: 54
+ev3dev#5|17:09:50.306 [Thread-1] INFO examples.Demo4 - Measures: 151
+ev3dev#5|17:09:50.457 [Thread-1] INFO examples.Demo4 - Measures: 325
+ev3dev#5|17:09:50.609 [Thread-1] INFO examples.Demo4 - Measures: 326
+ev3dev#5|17:09:50.734 [Thread-1] INFO examples.Demo4 - Measures: 326
+ev3dev#5|17:09:50.928 [Thread-1] INFO examples.Demo4 - Measures: 326
+ev3dev#5|17:09:50.990 [Thread-1] INFO examples.Demo4 - Measures: 76
+ev3dev#5|17:09:51.021 [Thread-1] INFO examples.Demo4 - Measures: 1
+ev3dev#5|17:09:51.139 [Thread-1] INFO examples.Demo4 - Measures: 249
+ev3dev#5|17:09:51.290 [Thread-1] INFO examples.Demo4 - Measures: 326
+ev3dev#5|17:09:51.422 [Thread-1] INFO examples.Demo4 - Measures: 327
+ev3dev#5|17:09:51.559 [Thread-1] INFO examples.Demo4 - Measures: 330
+ev3dev#5|17:09:51.687 [Thread-1] INFO examples.Demo4 - Measures: 330
+ev3dev#5|17:09:51.719 [Thread-1] INFO examples.Demo4 - Measures: 72
+ev3dev#5|17:09:51.778 [Thread-1] INFO examples.Demo4 - Measures: 256
+ev3dev#5|17:09:51.862 [Thread-1] INFO examples.Demo4 - Measures: 326
+ev3dev#5|17:09:52.013 [Thread-1] INFO examples.Demo4 - Measures: 324
+ev3dev#5|17:09:52.044 [Thread-1] INFO examples.Demo4 - Measures: 8
+ev3dev#5|17:09:52.163 [Thread-1] INFO examples.Demo4 - Measures: 253
+ev3dev#5|17:09:52.197 [Thread-1] INFO examples.Demo4 - Measures: 63
+ev3dev#5|17:09:52.218 [Thread-1] INFO examples.Demo4 - Measures: 37
+ev3dev#5|17:09:52.296 [Thread-1] INFO examples.Demo4 - Measures: 152
+ev3dev#5|17:09:52.348 [Thread-1] INFO examples.Demo4 - Measures: 136
+ev3dev#5|17:09:52.422 [Thread-1] INFO examples.Demo4 - Measures: 116
+ev3dev#5|17:09:52.529 [Thread-1] INFO examples.Demo4 - Measures: 209
+ev3dev#5|17:09:52.689 [Thread-1] INFO examples.Demo4 - Measures: 325
+ev3dev#5|17:09:52.863 [Thread-1] INFO examples.Demo4 - Measures: 323
+ev3dev#5|17:09:53.020 [Thread-1] INFO examples.Demo4 - Measures: 323
+ev3dev#5|17:09:53.079 [Thread-1] INFO examples.Demo4 - Measures: 80
+ev3dev#5|17:09:53.179 [Thread-1] INFO examples.Demo4 - Measures: 243
+ev3dev#5|17:09:53.353 [Thread-1] INFO examples.Demo4 - Measures: 322
+ev3dev#5|17:09:53.514 [Thread-1] INFO examples.Demo4 - Measures: 325
+ev3dev#5|17:09:53.614 [Thread-1] INFO examples.Demo4 - Measures: 168
+ev3dev#5|17:09:53.647 [Thread-1] INFO examples.Demo4 - Measures: 1
+ev3dev#5|17:09:53.697 [Thread-1] INFO examples.Demo4 - Measures: 157
+ev3dev#5|17:09:53.844 [Thread-1] INFO examples.Demo4 - Measures: 324
+ev3dev#5|17:09:53.972 [Thread-1] INFO examples.Demo4 - Measures: 225
+ev3dev#5|17:09:54.207 [Thread-1] INFO examples.Demo4 - Measures: 426
+ev3dev#5|17:09:54.258 [Thread-1] INFO examples.Demo4 - Measures: 133
+ev3dev#5|17:09:54.285 [Thread-1] INFO examples.Demo4 - Measures: 50
+ev3dev#5|17:09:54.306 [Thread-1] INFO examples.Demo4 - Measures: 1
+ev3dev#5|17:09:54.335 [Thread-1] INFO examples.Demo4 - Measures: 142
+ev3dev#5|17:09:54.518 [Thread-1] INFO examples.Demo4 - Measures: 323
+ev3dev#5|17:09:54.618 [Thread-1] INFO examples.Demo4 - Measures: 190
+ev3dev#5|17:09:54.672 [Thread-1] INFO examples.Demo4 - Measures: 135
+ev3dev#5|17:09:54.749 [Thread-1] INFO examples.Demo4 - Measures: 117
+ev3dev#5|17:09:54.854 [Thread-1] INFO examples.Demo4 - Measures: 208
+ev3dev#5|17:09:55.011 [Thread-1] INFO examples.Demo4 - Measures: 296
+ev3dev#5|17:09:55.038 [Thread-1] INFO examples.Demo4 - Measures: 1
+ev3dev#5|17:09:55.067 [Thread-1] INFO examples.Demo4 - Measures: 28
+ev3dev#5|17:09:55.137 [Thread-1] INFO examples.Demo4 - Measures: 225
+ev3dev#5|17:09:55.188 [Thread-1] INFO examples.Demo4 - Measures: 100
+ev3dev#5|17:09:55.347 [Thread-1] INFO examples.Demo4 - Measures: 324
+ev3dev#5|17:09:55.400 [Thread-1] INFO examples.Demo4 - Measures: 80
+ev3dev#5|17:09:55.503 [Thread-1] INFO examples.Demo4 - Measures: 245
+ev3dev#5|17:09:55.681 [Thread-1] INFO examples.Demo4 - Measures: 325
+ev3dev#5|17:09:55.718 [Thread-1] INFO examples.Demo4 - Measures: 34
+ev3dev#5|17:09:55.784 [Thread-1] INFO examples.Demo4 - Measures: 153
+ev3dev#5|17:09:55.838 [Thread-1] INFO examples.Demo4 - Measures: 139
+ev3dev#5|17:09:55.911 [Thread-1] INFO examples.Demo4 - Measures: 112
+ev3dev#5|17:09:55.929 [Thread-1] INFO examples.Demo4 - Measures: 1
+ev3dev#5|17:09:56.017 [Thread-1] INFO examples.Demo4 - Measures: 212
+ev3dev#5|17:09:56.179 [Thread-1] INFO examples.Demo4 - Measures: 325
+ev3dev#5|17:09:56.353 [Thread-1] INFO examples.Demo4 - Measures: 323
+ev3dev#5|17:09:56.510 [Thread-1] INFO examples.Demo4 - Measures: 324
+ev3dev#5|17:09:56.667 [Thread-1] INFO examples.Demo4 - Measures: 326
+ev3dev#5|17:09:56.845 [Thread-1] INFO examples.Demo4 - Measures: 325
+ev3dev#5|17:09:56.867 [Thread-1] INFO examples.Demo4 - Measures: 28
+ev3dev#5|17:09:56.944 [Thread-1] INFO examples.Demo4 - Measures: 152
+ev3dev#5|17:09:57.000 [Thread-1] INFO examples.Demo4 - Measures: 146
+ev3dev#5|17:09:57.185 [Thread-1] INFO examples.Demo4 - Measures: 326
+ev3dev#5|17:09:57.229 [Thread-1] INFO examples.Demo4 - Measures: 33
+ev3dev#5|17:09:57.334 [Thread-1] INFO examples.Demo4 - Measures: 293
+```
+
+## Stats
+
+It is interesting the comparative between both models using the library:
+
+![](./docs/images/stats.png)
+
+## Acknowledgements
+
+Many Thanks Peter Abeles by the initial development:
+https://github.com/lessthanoptimal/jrplidar 
 
 ## UML Design
 
@@ -221,9 +359,7 @@ robot@ev3dev:~$
 
 - Improve the Design solution
 - Refactor Service layer
-- Develop a ROS node for RPLidar A1
 - Add LeJOS Sensor support
-- Add RPLidarA2 support
 - Add Mock test
 
 
