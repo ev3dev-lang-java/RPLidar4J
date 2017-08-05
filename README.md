@@ -345,6 +345,11 @@ It is interesting the comparative between both models using the library:
 
 ![](./docs/images/stats.png)
 
+## Acknowledgements
+
+Many Thanks Peter Abeles by the initial development:
+https://github.com/lessthanoptimal/jrplidar 
+
 ## UML Design
 
 ![](./docs/uml/graph.png)
