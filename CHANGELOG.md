@@ -1,5 +1,9 @@
 # RPLidar4J Changelog
 
+## RPLidar4J v0.4.0 31/07/2017
+
+- Add RPLIDAR A2 Support
+
 ## RPLidar4J v0.3.0 06/03/2017
 
 - Adding RPLidarProviderListener
