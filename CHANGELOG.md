@@ -3,6 +3,7 @@
 ## RPLidar4J 0.4.0 05/08/2017
 
 - Add RPLIDAR A2 Support
+- ScanDistance stores distances as float
 
 ## RPLidar4J v0.3.0 06/03/2017
 

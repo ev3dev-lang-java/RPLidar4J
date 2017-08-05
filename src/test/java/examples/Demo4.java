@@ -11,11 +11,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public @Slf4j class Demo4 {
 
     private static AtomicInteger counter;
+    private static volatile int samplesPerSecond;
 
     public static void main(String[] args) throws Exception {
 
         log.info("Testing RPLidar on a EV3Dev with Java");
-        final String USBPort = "/dev/ttyUSB1";
+
+        final String USBPort = "/dev/ttyUSB0";
         final RPLidarA1 lidar = new RPLidarA1(USBPort);
         lidar.init();
 
@@ -32,23 +34,34 @@ public @Slf4j class Demo4 {
 
         lidar.addListener(new RPLidarProviderListener() {
             @Override
-            public void scanFinished(Scan scan) {
-                //log.info("Iteration: {}, Measures: {}", counter.incrementAndGet(), scan.getDistances().size());
-                log.info("Measures: {}", scan.getDistances().size());
-                /*
-                scan.getDistances()
-                        .stream()
-                        .filter((measure) -> measure.getQuality() > 10)
-                        //.filter((measure) -> (measure.getAngle() >= 345 || measure.getAngle() <= 15))
-                        .filter((measure) -> measure.getDistance() <= 50)
-                        .forEach(System.out::println);
-                        */
+            public void scanFinished(final Scan scan) {
+                final int counter = scan.getDistances().size();
+                //log.info("Measures: {}", counter);
+
+                synchronized (this) {
+                    samplesPerSecond += counter;
+                }
             }
         });
 
+        int counter = 0;
+
         boolean flag = true;
         while(flag){
+
             lidar.scan();
+
+            counter++;
+            log.info("Counter: {}, Samples: ;{}", counter, samplesPerSecond);
+            samplesPerSecond = 0;
+
+            if(counter > 500){
+                break;
+                //log.info("RESET");
+                //lidar.close();
+                //lidar.init();
+                //counter=0;
+            }
         }
 
         lidar.close();

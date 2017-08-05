@@ -1,6 +1,6 @@
 # RPLidar4J
 
-RPLidar4J, is a Java library designed to manage the sensor [RPLidar A1](http://www.slamtec.com/en/Lidar), a 2D LIDAR sensor in a easy way.
+RPLidar4J, is a Java library designed to manage the sensors [RPLidar A1 & RPLIDAR A2](http://www.slamtec.com/en/Lidar), a 2D LIDAR sensor in a easy way.
 
 [![Dependency Status](https://www.versioneye.com/user/projects/59046737e57fd5003857a94f/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/59046737e57fd5003857a94f)
 
@@ -23,7 +23,7 @@ the rotating center of the range scanner core. The rotation angle
 increases as rotating clockwise. The detailed definition is shown in 
 the following figure:
 
-![](./docs/images/rplidar_A1.png)
+![](./docs/images/rplidar_A2.png)
 
 **Technical docs:**
 
@@ -34,7 +34,7 @@ the following figure:
 
 ### Connect the sensor on your robot
 
-If you adquire the RPLidarA1 Kit, the sensor includes in the Kit a small
+If you adquire a kit, the sensor includes a small
 USB Controller. Connect plug the sensor with the USB Controller. 
 Later, connect the USB Controller to your favourite Brick (EV3, BrickPi+ & PiStorms)
 You should notice that the brick turn on the USB Controller and 
@@ -102,11 +102,11 @@ To use this project, import the library as a Maven dependency.
 <dependency>
     <groupId>com.github.ev3dev-lang-java</groupId>
     <artifactId>RPLidar4J</artifactId>
-    <version>v0.2.0</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
-Further information: https://jitpack.io/#ev3dev-lang-java/RPLidar4J/v0.2.0
+Further information: https://jitpack.io/#ev3dev-lang-java/RPLidar4J/0.4.0
 
 ### Using the sensor
 
@@ -339,6 +339,11 @@ ev3dev#5|17:09:57.229 [Thread-1] INFO examples.Demo4 - Measures: 33
 ev3dev#5|17:09:57.334 [Thread-1] INFO examples.Demo4 - Measures: 293
 ```
 
+## Stats
+
+It is interesting the comparative between both models using the library:
+
+![](./docs/images/stats.png)
 
 ## UML Design
 
