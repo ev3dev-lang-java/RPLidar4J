@@ -57,8 +57,10 @@ public @Slf4j class RpLidarLowLevelDriver {
 	// if it is in scanning mode.  When in scanning mode it just parses measurement packets
 	boolean scanning = false;
 
-	// Type of packet last recieved
-	int lastReceived = 0;
+	// Type of packet last received
+	//int lastReceived = 0;
+	volatile int lastReceived = 0;
+
 
 	/**
 	 * Initializes serial connection
@@ -75,7 +77,7 @@ public @Slf4j class RpLidarLowLevelDriver {
 
 		//Configuration for Serial port operations
 		final CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
-		final CommPort commPort = portIdentifier.open("FOO", 2000);
+		final CommPort commPort = portIdentifier.open(this.getClass().getName(), 2000);
 		serialPort = (SerialPort) commPort;
 		serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 		serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
@@ -175,6 +177,10 @@ public @Slf4j class RpLidarLowLevelDriver {
 				sendNoPayLoad(command);
 				pause(20);
 			} while (endTime >= System.currentTimeMillis() && lastReceived != expected);
+
+			//System.out.printf("Last received command %02x \n", lastReceived & 0xFF);
+			//System.out.printf("Expected command %02x \n", expected & 0xFF);
+
 			return lastReceived == expected;
 		}
 	}
@@ -336,11 +342,11 @@ public @Slf4j class RpLidarLowLevelDriver {
 				return parseHealth(data, offset, length);
 
 			case (byte) RCV_SCAN: // scan and force-scan
-				if (parseScan(data, offset, length)) {
+				//if (parseScan(data, offset, length)) {
 					scanning = true;
 					return true;
-				}
-				break;
+				//}
+				//break;
 			default:
 				log.debug("Unknown packet type = 0x%02x\n", type);
 		}
@@ -381,8 +387,10 @@ public @Slf4j class RpLidarLowLevelDriver {
 
 	protected boolean parseScan(byte[] data, int offset, int length) {
 
-		if (length != 5)
+		if (length != 5) {
+			log.debug("length != 5");
 			return false;
+		}
 
 		byte b0 = data[offset];
 		byte b1 = data[offset + 1];
@@ -390,11 +398,13 @@ public @Slf4j class RpLidarLowLevelDriver {
 		boolean start0 = (b0 & 0x01) != 0;
 		boolean start1 = (b0 & 0x02) != 0;
 
-		if (start0 == start1)
+		if (start0 == start1) {
 			return false;
+		}
 
-		if ((b1 & 0x01) != 1)
+		if ((b1 & 0x01) != 1) {
 			return false;
+		}
 
 		measurement.timeMilli = System.currentTimeMillis();
 		measurement.start = start0;
@@ -462,6 +472,7 @@ public @Slf4j class RpLidarLowLevelDriver {
 					e.printStackTrace();
 				}
 			}
+			log.info("RPLidar thread is terminating...");
 		}
 	}
 }
