@@ -13,7 +13,7 @@ dependencies {
    compile("org.projectlombok:lombok:1.16.18")
    compile("org.slf4j:slf4j-api:1.7.25")
    compile("org.rxtx:rxtx:2.1.7")
-   
+
    testCompile("ch.qos.logback:logback-classic:1.2.3")
 
    testCompile("junit:junit:4.12")
