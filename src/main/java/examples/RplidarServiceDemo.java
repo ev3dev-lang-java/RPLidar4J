@@ -4,7 +4,7 @@ import ev3dev.sensors.slamtec.service.RpLidarScan;
 
 import java.util.Date;
 
-public class RplidarService {
+public class RplidarServiceDemo {
 
 	private RpLidarHighLevelDriver driver = null;
 	private boolean initSuccess = false;
@@ -36,14 +36,20 @@ public class RplidarService {
 				scanNumber++;
 
 				scan.convertMilliMeters(mm);
-				
+
+
 				//RpLidarScan.N: rplidar data is stored in a sparse array of 360 degrees * 64 degreefractions
 				for (int j = 0; j < RpLidarScan.N; j++) {
 					Date scanTime = new Date(scan.time[j]);
 					if( scan.distance[j] != 0 && scanTime.after(lastScanThreshold)) {
-						System.out.println(scan.distance[j]);
+						//System.out.println(scan.distance[j]);
+						System.out.println(scan.distance.length);
+
 					}
 				}
+
+				System.out.println(scan.distance.length);
+
 				//Send the lidar detection to the UI
 				lastScanThreshold = new Date();
 
@@ -55,7 +61,7 @@ public class RplidarService {
 
 	public static void main(String[] args){
 
-		RplidarService rplidarService = new RplidarService();
+		RplidarServiceDemo rplidarService = new RplidarServiceDemo();
 		rplidarService.init();
 
 		int counter = 0;
@@ -67,7 +73,7 @@ public class RplidarService {
 			counter++;
 			System.out.println("Counter: " + counter);
 
-			if(counter > 5){
+			if(counter > 50){
 				break;
 			}
 
