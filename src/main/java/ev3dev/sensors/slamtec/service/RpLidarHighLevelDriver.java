@@ -1,4 +1,4 @@
-package examples;
+package ev3dev.sensors.slamtec.service;
 
 import ev3dev.sensors.slamtec.service.*;
 
@@ -154,6 +154,7 @@ public class RpLidarHighLevelDriver implements RpLidarListener {
 
 	@Override
 	public void handleMeasurement( RpLidarMeasurement measurement ) {
+
 		int which = measurement.angle;
 		// ignore obviously bad packet
 		if (which >= RpLidarScan.N) {
@@ -196,6 +197,6 @@ public class RpLidarHighLevelDriver implements RpLidarListener {
 	public boolean isInitialized() {
 		return initialized;
 	}
-	
-	
+
+
 }

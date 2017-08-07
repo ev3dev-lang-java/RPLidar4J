@@ -14,6 +14,6 @@ import java.util.Objects;
             return new RPLidarA1Fake(USBPort);
         }
 
-        return new RPLidarA1Driver(USBPort);
+        return new RPLidarA1Driver2(USBPort);
     }
 }
