@@ -66,8 +66,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
                 System.out.println("Scan wasn't ready yet");
             } else {
 
-                //scan.convertMilliMeters(mm);
+                //scan.con(mm);
                 System.out.println(scan.distance.length);
+
+                synchronized (this){
+                    final List<ScanDistance> distances = new ArrayList<>();
+
+                }
+                for (RPLidarProviderListener listener : listenerList) {
+                    //listener.scanFinished(new Scan(distances));
+                }
             }
         }else {
             //Lidar not initialized
@@ -80,6 +88,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
         }
         distances.sort(Comparator.comparing(ScanDistance::getAngle));
         return new Scan(Collections.unmodifiableList(distances));
+
     }
 
     @Override

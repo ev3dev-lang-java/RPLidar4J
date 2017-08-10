@@ -1,8 +1,12 @@
 package ev3dev.sensors.slamtec.service;
 
-import ev3dev.sensors.slamtec.service.*;
+import ev3dev.sensors.slamtec.RPLidarProviderListener;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * High level task which performs intelligent filtering to remove bad data and correctly starts up the sensor
@@ -10,7 +14,7 @@ import java.util.Arrays;
  * @author Peter Abeles
  */
 // TODO filter a scan if the angle is out of order
-public class RpLidarHighLevelDriver implements RpLidarListener {
+public @Slf4j class RpLidarHighLevelDriver implements RpLidarListener {
 
 	final RpLidarScan work = new RpLidarScan();
     final RpLidarScan complete = new RpLidarScan();
@@ -21,7 +25,7 @@ public class RpLidarHighLevelDriver implements RpLidarListener {
 	int expectedCount;
 	volatile boolean initialized;
 
-	/**
+    /**
 	 * Connects to the LIDAR
 	 * @param device Which device the lidar is connected to
 	 * @param totalCollect How many measurements should it collect in a single scan.  If <= 0 it will automatically
@@ -47,19 +51,19 @@ public class RpLidarHighLevelDriver implements RpLidarListener {
 		driver.pause(10000);
 
 		if( !driver.sendScan(500) ) {
-			System.out.println("Initial scan request failed");
+			log.debug("Initial scan request failed");
 			return false;
 		}else {
-			System.out.println("Initial scan request succeeded");
+			log.debug("Initial scan request succeeded");
 		}
 
 		if( totalCollect <= 0 ) {
 			if( !autoSetCollectionToScan() ) {
-				System.out.println("Failed autosetcollectiontoscan");
+				log.debug("Failed autosetcollectiontoscan");
 				return false;
 			}
 		} else {
-			System.out.println("Succeeded autosetcollectiontoscan " + expectedCount);
+			log.debug("Succeeded autosetcollectiontoscan " + expectedCount);
 			expectedCount = totalCollect;
 		}
 
@@ -123,7 +127,7 @@ public class RpLidarHighLevelDriver implements RpLidarListener {
 			driver.shutdown();
 			driver = null;
 			initialized = false;
-			System.out.println("Finishing stop command.");
+			log.info("Finishing stop command.");
 		}
 	}
 
@@ -197,6 +201,5 @@ public class RpLidarHighLevelDriver implements RpLidarListener {
 	public boolean isInitialized() {
 		return initialized;
 	}
-
 
 }
