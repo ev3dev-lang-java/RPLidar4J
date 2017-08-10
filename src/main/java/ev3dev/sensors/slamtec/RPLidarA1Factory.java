@@ -4,16 +4,20 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
-@Slf4j class RPLidarA1Factory {
+public @Slf4j class RPLidarA1Factory {
 
-    private static final String RPLIDARA1_ENV_KEY = "FAKE_RPLIDARA1";
+    public static final String RPLIDARA1_ENV_KEY = "RPLIDAR_MODE";
 
     public static RPLidarProvider getInstance(final String USBPort) {
 
-        if(Objects.nonNull(System.getProperty(RPLIDARA1_ENV_KEY))){
+        final String VALUE = System.getProperty(RPLIDARA1_ENV_KEY);
+        if(Objects.nonNull(VALUE)){
+            if(VALUE.equals("EXPERIMENTAL")){
+                return new RPLidarA1Driver2(USBPort);
+            }
             return new RPLidarA1Fake(USBPort);
         }
 
-        return new RPLidarA1Driver2(USBPort);
+        return new RPLidarA1Driver(USBPort);
     }
 }

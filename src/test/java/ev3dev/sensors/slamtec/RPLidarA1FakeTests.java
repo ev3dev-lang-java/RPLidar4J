@@ -14,7 +14,7 @@ public @Slf4j class RPLidarA1FakeTests {
 
 	@BeforeClass
 	public static void runOnceBeforeClass() {
-		System.setProperty("FAKE_RPLIDARA1", "true");
+		System.setProperty(RPLidarA1Factory.RPLIDARA1_ENV_KEY, "true");
 	}
 
 	@Test
