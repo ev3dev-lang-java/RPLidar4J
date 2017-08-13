@@ -46,8 +46,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
         }
 
         try {
-
-            //System.setProperty("gnu.io.rxtx.SerialPorts", this.USBPort);
             this.setPortProperty();
 
             initSuccess = driver.initialize(this.USBPort, 100);
@@ -72,19 +70,30 @@ import java.util.concurrent.atomic.AtomicBoolean;
         if(initSuccess) {
             RpLidarScan scan = new RpLidarScan();
             if (!driver.blockCollectScan(scan, 0)) { //10000
-                System.out.println("Scan wasn't ready yet");
+                log.debug("Scan wasn't ready yet");
             } else {
 
                 //scan.con(mm);
-                System.out.println(scan.distance.length);
+                //log.info("{}", scan.distance.length);
+                //log.info("{}", scan.used.size);
+                //log.info("{}", scan.used.data.length);
 
                 synchronized (this){
-                    final List<ScanDistance> distances = new ArrayList<>();
+                    //final List<ScanDistance> distances = new ArrayList<>();
 
+                    for (int x : scan.used.data) {
+                        distancesTemp.add(new ScanDistance(
+                                x,
+                                scan.distance[x],
+                                scan.quality[x],
+                                false));
+                    }
+
+                    for (RPLidarProviderListener listener : listenerList) {
+                        listener.scanFinished(new Scan(distancesTemp));
+                    }
                 }
-                for (RPLidarProviderListener listener : listenerList) {
-                    //listener.scanFinished(new Scan(distances));
-                }
+
             }
         }else {
             //Lidar not initialized
