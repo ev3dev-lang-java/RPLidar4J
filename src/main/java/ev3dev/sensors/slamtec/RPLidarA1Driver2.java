@@ -46,7 +46,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
         }
 
         try {
-            System.setProperty("gnu.io.rxtx.SerialPorts", this.USBPort);
+
+            //System.setProperty("gnu.io.rxtx.SerialPorts", this.USBPort);
+            this.setPortProperty();
+
             initSuccess = driver.initialize(this.USBPort, 100);
             //Let's just pretend it worked...
             initSuccess = true;
@@ -54,6 +57,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
         } catch (Exception e) {
             throw new RPLidarA1ServiceException(e);
         }
+    }
+
+    private void setPortProperty(){
+        final String ports = System.getProperty("gnu.io.rxtx.SerialPorts");
+        final String newPorts = ((ports == null) ? "" : (ports + ":")) + this.USBPort;
+        System.setProperty("gnu.io.rxtx.SerialPorts", newPorts);
     }
 
     @Override
