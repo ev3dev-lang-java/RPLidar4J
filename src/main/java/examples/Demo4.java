@@ -57,10 +57,6 @@ public @Slf4j class Demo4 {
 
             if(counter > 500){
                 break;
-                //log.info("RESET");
-                //lidar.close();
-                //lidar.init();
-                //counter=0;
             }
         }
 

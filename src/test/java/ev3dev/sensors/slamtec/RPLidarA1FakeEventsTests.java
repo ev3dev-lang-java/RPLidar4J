@@ -1,6 +1,7 @@
 package ev3dev.sensors.slamtec;
 
 import ev3dev.sensors.slamtec.model.Scan;
+import ev3dev.sensors.slamtec.model.ScanDistance;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -11,7 +12,7 @@ public @Slf4j class RPLidarA1FakeEventsTests implements RPLidarProviderListener 
 
     @BeforeClass
 	public static void runOnceBeforeClass() {
-		System.setProperty("FAKE_RPLIDARA1", "true");
+		System.setProperty(RPLidarA1Factory.RPLIDARA1_ENV_KEY, "true");
 	}
 
 	@Test
@@ -35,7 +36,7 @@ public @Slf4j class RPLidarA1FakeEventsTests implements RPLidarProviderListener 
         lidar.addListener(new RPLidarProviderListener() {
 
             @Override
-            public Scan scanFinished(Scan scan) {
+            public void scanFinished(Scan scan) {
                 log.info("Measures: {}", scan.getDistances().size());
                 scan.getDistances()
                         .stream()
@@ -43,7 +44,6 @@ public @Slf4j class RPLidarA1FakeEventsTests implements RPLidarProviderListener 
                         .filter((measure) -> (measure.getAngle() >= 345 || measure.getAngle() <= 15))
                         .filter((measure) -> measure.getDistance() <= 50)
                         .forEach(System.out::println);
-                return scan;
             }
         });
         lidar.init();
@@ -56,11 +56,10 @@ public @Slf4j class RPLidarA1FakeEventsTests implements RPLidarProviderListener 
 
 
     @Override
-    public Scan scanFinished(final Scan scan) {
+    public void scanFinished(final Scan scan) {
         final long counter = scan.getDistances()
             .stream()
             .count();
 		log.info("Measures: {}", counter);
-        return scan;
     }
 }
