@@ -14,7 +14,7 @@ import lombok.Value;
 @Value
 public class ScanDistance {
 
-    private final int angle;
+    private final float angle;
     private final float distance;
     private final int quality;
     private final boolean start;

@@ -1,10 +1,9 @@
 package examples;
 
 import ev3dev.sensors.slamtec.RPLidarA1;
-import ev3dev.sensors.slamtec.RPLidarA1Factory;
 import ev3dev.sensors.slamtec.RPLidarProviderListener;
 import ev3dev.sensors.slamtec.model.Scan;
-import ev3dev.sensors.slamtec.model.ScanDistance;
+
 import lombok.extern.slf4j.Slf4j;
 
 public @Slf4j class Demo8 {
@@ -13,15 +12,14 @@ public @Slf4j class Demo8 {
 
     public static void main(String[] args) throws Exception {
 
-        //Testing new driver
-        System.setProperty(RPLidarA1Factory.RPLIDARA1_ENV_KEY, "EXPERIMENTAL");
-
         log.info("Testing RPLidar on a EV3Dev with Java");
+
         final String USBPort = "/dev/ttyUSB0";
         final RPLidarA1 lidar = new RPLidarA1(USBPort);
         lidar.init();
 
         lidar.addListener(new RPLidarProviderListener() {
+
             @Override
             public void scanFinished(final Scan scan) {
                 final int counter = scan.getDistances().size();
@@ -30,14 +28,10 @@ public @Slf4j class Demo8 {
 
                 /*
                 for (ScanDistance scanDistance: scan.getDistances()) {
-                    log.info("Angle: {}, Distance: {}, Quality: {}", scanDistance.getAngle()/64f, scanDistance.getDistance(), scanDistance.getQuality());
-                }*/
-
-                /*
-                synchronized (this) {
-                    samplesPerSecond += counter;
+                    log.info("Angle: {}, Distance: {}, Quality: {}", scanDistance.getAngle(), scanDistance.getDistance(), scanDistance.getQuality());
                 }
                 */
+
             }
         });
 
@@ -49,11 +43,9 @@ public @Slf4j class Demo8 {
             lidar.scan();
 
             counter++;
-            //log.info("Counter: {}, Samples: ;{}, {}", counter, samplesPerSecond, scan.getDistances().size());
             log.info("Counter: {}", counter);
-            //samplesPerSecond = 0;
 
-            if(counter > 50){
+            if(counter > 10){
                 break;
             }
         }

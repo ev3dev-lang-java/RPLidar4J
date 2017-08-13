@@ -73,17 +73,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
                 log.debug("Scan wasn't ready yet");
             } else {
 
-                //scan.con(mm);
-                //log.info("{}", scan.distance.length);
-                //log.info("{}", scan.used.size);
-                //log.info("{}", scan.used.data.length);
-
                 synchronized (this){
                     //final List<ScanDistance> distances = new ArrayList<>();
 
                     for (int x : scan.used.data) {
                         distancesTemp.add(new ScanDistance(
-                                x,
+                                x/64f,
                                 scan.distance[x],
                                 scan.quality[x],
                                 false));

@@ -12,12 +12,9 @@ public @Slf4j class RPLidarA1Factory {
 
         final String VALUE = System.getProperty(RPLIDARA1_ENV_KEY);
         if(Objects.nonNull(VALUE)){
-            if(VALUE.equals("EXPERIMENTAL")){
-                return new RPLidarA1Driver2(USBPort);
-            }
             return new RPLidarA1Fake(USBPort);
         }
 
-        return new RPLidarA1Driver(USBPort);
+        return new RPLidarA1Driver2(USBPort);
     }
 }
