@@ -74,25 +74,6 @@ fb0              log      mem           ptmx                ram3   shm     tty13
 If you didn´t connect another device on your robot, the device 
 `ttyUSB0` should be your RPLidarA1 sensor. 
 
-### Install librxtx-java
-
-Current implementation uses the library `librxtx-java` to manage 
-the Serial port communications. This library is very popular on Java 
-ecosystem. To install the library on your brick, install the following 
-Debian package:
-
-```
-sudo apt-get install librxtx-java
-```
-
-When the Debian package is finished, you should be the native library on
-the following path: `/usr/lib/jni/`
-
-```
-robot@ev3dev:~$ ls /usr/lib/jni/
-libopencv_java249.so   librxtxI2C.so               librxtxParallel.so       librxtxRS485.so        librxtxRaw.so             librxtxSerial.so
-librxtxI2C-2.2pre1.so  librxtxParallel-2.2pre1.so  librxtxRS485-2.2pre1.so  librxtxRaw-2.2pre1.so  librxtxSerial-2.2pre1.so
-```
 
 ### Add the dependency on the project
 
