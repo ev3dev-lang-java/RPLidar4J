@@ -3,3 +3,8 @@
 build
 *.iml
 docs/api
+/bin/
+/target/
+/.classpath
+/.project
+/.settings/
