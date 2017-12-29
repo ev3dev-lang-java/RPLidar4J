@@ -28,7 +28,7 @@ the following figure:
 **Technical docs:**
 
 - [datasheet-rplidar](./docs/sdk/datasheet-rplidar.pdf)
-- [communication-protocol](./docs/rpk-02-communication-protocol.pdf)
+- [communication-protocol](./docs/sdk/rpk-02-communication-protocol.pdf)
 
 ## Getting Started
 
