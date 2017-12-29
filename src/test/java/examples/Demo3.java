@@ -3,6 +3,7 @@ package examples;
 import ev3dev.sensors.slamtec.RPLidarA1;
 import ev3dev.sensors.slamtec.RPLidarProviderListener;
 import ev3dev.sensors.slamtec.model.Scan;
+import ev3dev.sensors.slamtec.service.RpLidarDeviceInfo;
 import lombok.extern.slf4j.Slf4j;
 
 public @Slf4j class Demo3
@@ -27,10 +28,15 @@ public @Slf4j class Demo3
 						.filter((measure) -> (measure.getAngle() >= 345 || measure.getAngle() <= 15))
 						.filter((measure) -> measure.getDistance() <= 50).forEach(System.out::println);
 			}
+
+			@Override
+			public void deviceInfo(RpLidarDeviceInfo info)
+			{
+			}
 		});
 		for (int x = 0; x <= 10; x++)
 		{
-			lidar.scan();
+			lidar.oneShotScan();
 		}
 		lidar.close();
 		log.info("End");

@@ -20,7 +20,7 @@ public class RPLidarA1Tests
 		final String USBPort = "ttyUSB0";
 		final RPLidarA1 lidar = new RPLidarA1(USBPort);
 		lidar.init();
-		lidar.scan().getDistances().stream().forEach(System.out::println);
+		lidar.oneShotScan().getDistances().stream().forEach(System.out::println);
 		lidar.close();
 	}
 
@@ -31,7 +31,7 @@ public class RPLidarA1Tests
 		final String USBPort = "ttyUSB0";
 		final RPLidarA1 lidar = new RPLidarA1(USBPort);
 		lidar.init();
-		final Scan scan = lidar.scan();
+		final Scan scan = lidar.oneShotScan();
 		lidar.close();
 
 		assertThat(scan, is(notNullValue()));

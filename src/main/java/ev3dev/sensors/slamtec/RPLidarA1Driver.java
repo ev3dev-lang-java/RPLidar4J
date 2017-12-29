@@ -61,7 +61,6 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 		try
 		{
 			driver = new RpLidarLowLevelDriver(this.USBPort, this);
-			// TODO Improve this Exception handling
 		} catch (Exception e)
 		{
 			throw new RPLidarA1ServiceException(e);
@@ -70,19 +69,41 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 		driver.setVerbose(false);
 		driver.sendReset();
 
-		// for v2 only - I guess this command is ignored by v1
-		// driver.sendStartMotor(660);
+		driver.sendStartMotor(660);
+		driver.sendGetInfo();
 
-		driver.pause(200);
+		final CountDownLatch latch = new CountDownLatch(1);
+
+		RPLidarProviderListener listener = new RPLidarProviderListener()
+		{
+
+			@Override
+			public void scanFinished(Scan scan)
+			{
+			}
+
+			@Override
+			public void deviceInfo(RpLidarDeviceInfo info)
+			{
+				// by waiting for the device info we can be sure that the
+				// RPLidar has reset
+				latch.countDown();
+			}
+		};
+		addListener(listener);
+
+		latch.await(5, TimeUnit.SECONDS);
+		removeListener(listener);
+
 	}
 
 	@Override
-	public Scan scan() throws RPLidarA1ServiceException, InterruptedException
+	public Scan oneShotScan() throws RPLidarA1ServiceException, InterruptedException
 	{
 
 		flag = false;
 		distancesTemp.clear();
-		driver.sendScanA1();
+		driver.sendScan();
 
 		// the first scan is always incomplete, so wait for 2 scans
 		final CountDownLatch latch = new CountDownLatch(2);
@@ -95,11 +116,13 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 			@Override
 			public void scanFinished(Scan scan)
 			{
-
 				distances.set(scan);
-
 				latch.countDown();
+			}
 
+			@Override
+			public void deviceInfo(RpLidarDeviceInfo info)
+			{
 			}
 		};
 		addListener(listener);
@@ -111,11 +134,11 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 	}
 
 	@Override
-	public void continousScan() throws RPLidarA1ServiceException
+	public void continuousScanning() throws RPLidarA1ServiceException
 	{
 		flag = false;
 		distancesTemp.clear();
-		driver.sendScanA1();
+		driver.sendScan();
 		log.warn("Initiated continous scanning");
 	}
 
@@ -130,9 +153,8 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 	public void close() throws RPLidarA1ServiceException
 	{
 		closingStatus = new AtomicBoolean(true);
-		// driver.sendStopMotor();
+		driver.sendStopMotor();
 		driver.shutdown();
-		driver.pause(100);
 	}
 
 	@Override
@@ -201,7 +223,10 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 	@Override
 	public void handleDeviceInfo(RpLidarDeviceInfo info)
 	{
-
+		for (RPLidarProviderListener listener : listenerList)
+		{
+			listener.deviceInfo(info);
+		}
 	}
 
 }

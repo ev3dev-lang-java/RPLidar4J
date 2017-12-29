@@ -145,22 +145,6 @@ public @Slf4j class RpLidarLowLevelDriver implements SerialPortEventListener
 	}
 
 	/**
-	 * Pauses for the specified number of milliseconds
-	 */
-	public void pause(long milli)
-	{
-		synchronized (this)
-		{
-			try
-			{
-				TimeUnit.MILLISECONDS.sleep(milli);
-			} catch (InterruptedException e)
-			{
-			}
-		}
-	}
-
-	/**
 	 * Shuts down the serial connection and threads
 	 */
 	public void shutdown()
@@ -191,12 +175,6 @@ public @Slf4j class RpLidarLowLevelDriver implements SerialPortEventListener
 	public void sendScan()
 	{
 		sendNoPayLoad(SCAN);
-	}
-
-	public void sendScanA1()
-	{
-		sendNoPayLoad(SCAN);
-		// scanning = true;
 	}
 
 	/**

@@ -4,6 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ev3dev.sensors.slamtec.model.Scan;
+import ev3dev.sensors.slamtec.service.RpLidarDeviceInfo;
 import lombok.extern.slf4j.Slf4j;
 
 public @Slf4j class RPLidarA1FakeEventsTests implements RPLidarProviderListener
@@ -47,6 +48,11 @@ public @Slf4j class RPLidarA1FakeEventsTests implements RPLidarProviderListener
 						.filter((measure) -> measure.getDistance() <= 50).forEach(System.out::println);
 
 			}
+
+			@Override
+			public void deviceInfo(RpLidarDeviceInfo info)
+			{
+			}
 		});
 		lidar.init();
 		Thread.sleep(2000);
@@ -61,5 +67,10 @@ public @Slf4j class RPLidarA1FakeEventsTests implements RPLidarProviderListener
 		final long counter = scan.getDistances().stream().count();
 		log.info("Measures: {}", counter);
 
+	}
+
+	@Override
+	public void deviceInfo(RpLidarDeviceInfo info)
+	{
 	}
 }

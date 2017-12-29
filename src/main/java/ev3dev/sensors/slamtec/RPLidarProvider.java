@@ -9,9 +9,9 @@ public interface RPLidarProvider
 
 	void init() throws RPLidarA1ServiceException, InterruptedException;
 
-	Scan scan() throws RPLidarA1ServiceException, InterruptedException;
+	Scan oneShotScan() throws RPLidarA1ServiceException, InterruptedException;
 
-	void continousScan() throws RPLidarA1ServiceException;
+	void continuousScanning() throws RPLidarA1ServiceException;
 
 	void stopScanning() throws RPLidarA1ServiceException;
 

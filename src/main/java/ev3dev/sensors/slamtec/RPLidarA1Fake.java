@@ -30,7 +30,7 @@ class RPLidarA1Fake implements RPLidarProvider
 	}
 
 	@Override
-	public Scan scan() throws RPLidarA1ServiceException
+	public Scan oneShotScan() throws RPLidarA1ServiceException
 	{
 		final List<ScanDistance> distances = Collections.synchronizedList(new ArrayList<>());
 		for (int angle = 0; angle < 360; angle++)
@@ -97,7 +97,7 @@ class RPLidarA1Fake implements RPLidarProvider
 						{
 							try
 							{
-								listener.scanFinished(scan());
+								listener.scanFinished(oneShotScan());
 							} catch (RPLidarA1ServiceException e)
 							{
 								log.error(e.getLocalizedMessage());
@@ -134,7 +134,7 @@ class RPLidarA1Fake implements RPLidarProvider
 	}
 
 	@Override
-	public void continousScan() throws RPLidarA1ServiceException
+	public void continuousScanning() throws RPLidarA1ServiceException
 	{
 		throw new RuntimeException("Not Implemented");
 

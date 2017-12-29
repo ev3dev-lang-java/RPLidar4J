@@ -4,6 +4,7 @@ import ev3dev.sensors.slamtec.RPLidarA1;
 import ev3dev.sensors.slamtec.RPLidarA1ServiceException;
 import ev3dev.sensors.slamtec.RPLidarProviderListener;
 import ev3dev.sensors.slamtec.model.Scan;
+import ev3dev.sensors.slamtec.service.RpLidarDeviceInfo;
 import lombok.extern.slf4j.Slf4j;
 
 public @Slf4j class Demo4
@@ -49,6 +50,11 @@ public @Slf4j class Demo4
 					samplesPerSecond += counter;
 				}
 			}
+
+			@Override
+			public void deviceInfo(RpLidarDeviceInfo info)
+			{
+			}
 		});
 
 		int counter = 0;
@@ -57,7 +63,7 @@ public @Slf4j class Demo4
 		while (flag)
 		{
 
-			lidar.scan();
+			lidar.oneShotScan();
 
 			counter++;
 			log.info("Counter: {}, Samples: ;{}", counter, samplesPerSecond);

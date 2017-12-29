@@ -17,7 +17,7 @@ public @Slf4j class Demo2
 
 		for (int x = 0; x <= 40; x++)
 		{
-			Scan scan = lidar.scan();
+			Scan scan = lidar.oneShotScan();
 			if (scan != null)
 			{
 				final long counter = scan.getDistances().stream().count();

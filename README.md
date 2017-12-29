@@ -102,6 +102,7 @@ import java.util.concurrent.CountDownLatch;
 import ev3dev.sensors.slamtec.RPLidarA1;
 import ev3dev.sensors.slamtec.RPLidarProviderListener;
 import ev3dev.sensors.slamtec.model.Scan;
+import ev3dev.sensors.slamtec.service.RpLidarDeviceInfo;
 import lombok.extern.slf4j.Slf4j;
 
 public @Slf4j class Continous
@@ -117,7 +118,7 @@ public @Slf4j class Continous
 
 		final CountDownLatch latch = new CountDownLatch(30);
 
-		lidar.continousScan();
+		lidar.continuousScanning();
 
 		lidar.addListener(new RPLidarProviderListener()
 		{
@@ -129,6 +130,11 @@ public @Slf4j class Continous
 				log.info(" Measures: {}", counter);
 				latch.countDown();
 
+			}
+
+			@Override
+			public void deviceInfo(RpLidarDeviceInfo info)
+			{
 			}
 		});
 

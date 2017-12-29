@@ -24,9 +24,9 @@ public class RPLidarA1 implements RPLidarProvider
 	}
 
 	@Override
-	public Scan scan() throws RPLidarA1ServiceException, InterruptedException
+	public Scan oneShotScan() throws RPLidarA1ServiceException, InterruptedException
 	{
-		return rpLidarProvider.scan();
+		return rpLidarProvider.oneShotScan();
 	}
 
 	@Override
@@ -48,9 +48,9 @@ public class RPLidarA1 implements RPLidarProvider
 	}
 
 	@Override
-	public void continousScan() throws RPLidarA1ServiceException
+	public void continuousScanning() throws RPLidarA1ServiceException
 	{
-		rpLidarProvider.continousScan();
+		rpLidarProvider.continuousScanning();
 
 	}
 
