@@ -97,36 +97,49 @@ class on the project:
 ``` java
 package examples;
 
+import java.util.concurrent.CountDownLatch;
+
 import ev3dev.sensors.slamtec.RPLidarA1;
+import ev3dev.sensors.slamtec.RPLidarProviderListener;
 import ev3dev.sensors.slamtec.model.Scan;
 import lombok.extern.slf4j.Slf4j;
 
-public @Slf4j class Demo {
+public @Slf4j class Continous
+{
 
-    public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception
+	{
 
-        log.info("Testing RPLidar on a EV3 Brick with Java");
-        final String USBPort = "/dev/ttyUSB0";
-        final RPLidarA1 lidar = new RPLidarA1(USBPort);
-        lidar.init();
+		log.info("Testing RPLidar on a EV3Dev with Java");
+		final String USBPort = "/dev/ttyUSB0";
+		final RPLidarA1 lidar = new RPLidarA1(USBPort);
+		lidar.init();
 
-        for(int x = 0; x <= 5; x++){
+		final CountDownLatch latch = new CountDownLatch(30);
 
-            final Scan scan = lidar.scan();
-            log.info("Iteration: {}, Measures: {}", x, scan.getDistances().size());
-            scan.getDistances()
-                .stream()
-                .filter((measure) -> measure.getQuality() > 10)
-                .filter((measure) -> (measure.getAngle() >= 345 || measure.getAngle() <= 15))
-                .filter((measure) -> measure.getDistance() <= 50)
-                .forEach(System.out::println);
-        }
+		lidar.continousScan();
 
-        lidar.close();
-        log.info("End demo");
-        System.exit(0);
-    }
+		lidar.addListener(new RPLidarProviderListener()
+		{
+
+			@Override
+			public void scanFinished(Scan scan)
+			{
+				final long counter = scan.getDistances().stream().count();
+				log.info(" Measures: {}", counter);
+				latch.countDown();
+
+			}
+		});
+
+		latch.await();
+
+		lidar.close();
+		log.info("End demo");
+		System.exit(0);
+	}
 }
+
 ```
 
 Once, you have the example in your project, create a Jar with the project
@@ -142,18 +155,42 @@ java -Djava.library.path=/usr/lib/jni/ -jar /home/robot/RPLidar4J-all-0.4.0.jar
 Example using RPLIDAR A1:
 
 ```
-java -Djava.library.path=/usr/lib/jni/ -jar /home/robot/RPLidar4J-all-0.4.0.jar
-ev3dev#5|17:09:45.943 [main] INFO examples.Demo4 - Testing RPLidar on a EV3Dev with Java
-ev3dev#5|17:09:46.377 [main] INFO ev3dev.sensors.slamtec.RPLidarA1Driver - Starting a RPLidarA1 instance
-ev3dev#5|17:09:46.388 [main] INFO ev3dev.sensors.slamtec.RPLidarA1Driver - Connecting with: /dev/ttyUSB1
-ev3dev#5|17:09:46.678 [main] INFO ev3dev.sensors.slamtec.service.RpLidarLowLevelDriver - Opening port /dev/ttyUSB1
-ev3dev#5|17:09:50.197 [Thread-1] INFO examples.Demo4 - Measures: 54
-ev3dev#5|17:09:50.306 [Thread-1] INFO examples.Demo4 - Measures: 151
-ev3dev#5|17:09:50.457 [Thread-1] INFO examples.Demo4 - Measures: 325
-ev3dev#5|17:09:50.609 [Thread-1] INFO examples.Demo4 - Measures: 326
-ev3dev#5|17:09:50.734 [Thread-1] INFO examples.Demo4 - Measures: 326
-ev3dev#5|17:09:50.928 [Thread-1] INFO examples.Demo4 - Measures: 326
-ev3dev#5|17:09:50.990 [Thread-1] INFO examples.Demo4 - Measures: 76
+java -jar /home/robot/RPLidar4J-all-0.4.0.jar
+2017-12-29 11:48:04 [main] INFO  examples.Continous:16 - Testing RPLidar on a EV3Dev with Java
+2017-12-29 11:48:04 [main] INFO  e.sensors.slamtec.RPLidarA1Driver:42 - Starting a RPLidarA1 instance
+2017-12-29 11:48:04 [main] INFO  e.sensors.slamtec.RPLidarA1Driver:52 - Connecting with: /dev/ttyUSB0
+2017-12-29 11:48:04 [main] INFO  e.s.s.service.RpLidarLowLevelDriver:71 - Opening port /dev/ttyUSB0
+2017-12-29 11:48:04 [main] INFO  e.s.s.service.RpLidarLowLevelDriver:96 - Successfully opened serial port.
+2017-12-29 11:48:04 [main] WARN  e.s.s.service.RpLidarLowLevelDriver:218 - Resetting RPLidar
+2017-12-29 11:48:05 [main] WARN  e.sensors.slamtec.RPLidarA1Driver:119 - Initiated continous scanning
+2017-12-29 11:48:06 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 305
+2017-12-29 11:48:06 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 318
+2017-12-29 11:48:07 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:07 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:07 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:07 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:07 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 318
+2017-12-29 11:48:07 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:07 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:08 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:08 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 320
+2017-12-29 11:48:08 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 318
+2017-12-29 11:48:08 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:08 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:08 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:09 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 318
+2017-12-29 11:48:09 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:09 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:09 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 318
+2017-12-29 11:48:09 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:09 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:09 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 319
+2017-12-29 11:48:10 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 317
+2017-12-29 11:48:10 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 318
+2017-12-29 11:48:10 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 318
+2017-12-29 11:48:10 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 318
+2017-12-29 11:48:10 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 318
+2017-12-29 11:48:10 [EventThread /dev/ttyUSB0] INFO  examples.Continous:32 -  Measures: 318
 
 ```
 

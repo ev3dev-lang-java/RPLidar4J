@@ -292,7 +292,8 @@ public @Slf4j class RpLidarLowLevelDriver implements SerialPortEventListener
 				output[i] = bytes[i];
 			}
 
-			log.debug("Sending byte array, of size: '" + output.length + "' to serial port. " + length);
+			// log.debug("Sending byte array, of size: '" + output.length + "'
+			// to serial port. " + length);
 			serialPort.writeBytes(output);
 			return true;
 

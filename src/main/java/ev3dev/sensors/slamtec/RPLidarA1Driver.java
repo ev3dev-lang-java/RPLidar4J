@@ -89,23 +89,23 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 
 		final AtomicReference<Scan> distances = new AtomicReference<>();
 
-		addListener(new RPLidarProviderListener()
+		RPLidarProviderListener listener = new RPLidarProviderListener()
 		{
 
 			@Override
 			public void scanFinished(Scan scan)
 			{
 
-				removeListener(this);
-
 				distances.set(scan);
 
 				latch.countDown();
 
 			}
-		});
+		};
+		addListener(listener);
 
-		latch.await(3, TimeUnit.SECONDS);
+		latch.await(15, TimeUnit.SECONDS);
+		removeListener(listener);
 		return distances.get();
 
 	}
