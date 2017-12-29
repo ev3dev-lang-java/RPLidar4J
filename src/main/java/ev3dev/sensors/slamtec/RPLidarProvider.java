@@ -2,14 +2,22 @@ package ev3dev.sensors.slamtec;
 
 import ev3dev.sensors.slamtec.model.Scan;
 
-public interface RPLidarProvider {
+public interface RPLidarProvider
+{
 
-    int SCAN_DEGREES = 360;
+	int SCAN_DEGREES = 360;
 
-    void init() throws RPLidarA1ServiceException;
-    Scan scan() throws RPLidarA1ServiceException;
-    void close() throws RPLidarA1ServiceException;
+	void init() throws RPLidarA1ServiceException, InterruptedException;
 
-    void addListener(RPLidarProviderListener listener);
-    void removeListener(RPLidarProviderListener listener);
+	Scan scan() throws RPLidarA1ServiceException, InterruptedException;
+
+	void continousScan() throws RPLidarA1ServiceException;
+
+	void stopScanning() throws RPLidarA1ServiceException;
+
+	void close() throws RPLidarA1ServiceException;
+
+	void addListener(RPLidarProviderListener listener);
+
+	void removeListener(RPLidarProviderListener listener);
 }

@@ -1,10 +1,13 @@
 package examples;
 
+import java.util.concurrent.CountDownLatch;
+
 import ev3dev.sensors.slamtec.RPLidarA1;
+import ev3dev.sensors.slamtec.RPLidarProviderListener;
 import ev3dev.sensors.slamtec.model.Scan;
 import lombok.extern.slf4j.Slf4j;
 
-public @Slf4j class Demo2
+public @Slf4j class Continous
 {
 
 	public static void main(String[] args) throws Exception
@@ -15,15 +18,24 @@ public @Slf4j class Demo2
 		final RPLidarA1 lidar = new RPLidarA1(USBPort);
 		lidar.init();
 
-		for (int x = 0; x <= 40; x++)
+		final CountDownLatch latch = new CountDownLatch(30);
+
+		lidar.continousScan();
+
+		lidar.addListener(new RPLidarProviderListener()
 		{
-			Scan scan = lidar.scan();
-			if (scan != null)
+
+			@Override
+			public void scanFinished(Scan scan)
 			{
 				final long counter = scan.getDistances().stream().count();
-				log.info("Iteration: {}, Measures: {}", x, counter);
+				log.info(" Measures: {}", counter);
+				latch.countDown();
+
 			}
-		}
+		});
+
+		latch.await();
 
 		lidar.close();
 		log.info("End demo");

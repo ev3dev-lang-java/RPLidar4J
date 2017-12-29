@@ -6,67 +6,76 @@ import ev3dev.sensors.slamtec.RPLidarProviderListener;
 import ev3dev.sensors.slamtec.model.Scan;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.atomic.AtomicInteger;
+public @Slf4j class Demo4
+{
 
-public @Slf4j class Demo4 {
+	private static volatile int samplesPerSecond;
 
-    private static AtomicInteger counter;
-    private static volatile int samplesPerSecond;
+	public static void main(String[] args) throws Exception
+	{
 
-    public static void main(String[] args) throws Exception {
+		log.info("Testing RPLidar on a EV3Dev with Java");
 
-        log.info("Testing RPLidar on a EV3Dev with Java");
+		final String USBPort = "/dev/ttyUSB0";
+		final RPLidarA1 lidar = new RPLidarA1(USBPort);
+		lidar.init();
 
-        final String USBPort = "/dev/ttyUSB0";
-        final RPLidarA1 lidar = new RPLidarA1(USBPort);
-        lidar.init();
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				System.out.println("Close Lidar");
+				try
+				{
+					lidar.close();
+				} catch (RPLidarA1ServiceException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}));
 
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            public void run() {
-                System.out.println("Close Lidar");
-                try {
-                    lidar.close();
-                } catch (RPLidarA1ServiceException e) {
-                    e.printStackTrace();
-                }
-            }
-        }));
+		lidar.addListener(new RPLidarProviderListener()
+		{
+			@Override
+			public void scanFinished(final Scan scan)
+			{
+				final int counter = scan.getDistances().size();
+				// log.info("Measures: {}", counter);
 
-        lidar.addListener(new RPLidarProviderListener() {
-            @Override
-            public void scanFinished(final Scan scan) {
-                final int counter = scan.getDistances().size();
-                //log.info("Measures: {}", counter);
+				synchronized (this)
+				{
+					samplesPerSecond += counter;
+				}
+			}
+		});
 
-                synchronized (this) {
-                    samplesPerSecond += counter;
-                }
-            }
-        });
+		int counter = 0;
 
-        int counter = 0;
+		boolean flag = true;
+		while (flag)
+		{
 
-        boolean flag = true;
-        while(flag){
+			lidar.scan();
 
-            lidar.scan();
+			counter++;
+			log.info("Counter: {}, Samples: ;{}", counter, samplesPerSecond);
+			samplesPerSecond = 0;
 
-            counter++;
-            log.info("Counter: {}, Samples: ;{}", counter, samplesPerSecond);
-            samplesPerSecond = 0;
+			if (counter > 500)
+			{
+				break;
+				// log.info("RESET");
+				// lidar.close();
+				// lidar.init();
+				// counter=0;
+			}
+		}
 
-            if(counter > 500){
-                break;
-                //log.info("RESET");
-                //lidar.close();
-                //lidar.init();
-                //counter=0;
-            }
-        }
-
-        lidar.close();
-        log.info("End");
-        System.exit(0);
-    }
+		lidar.close();
+		log.info("End");
+		System.exit(0);
+	}
 
 }

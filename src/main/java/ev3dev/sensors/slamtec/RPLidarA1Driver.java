@@ -1,167 +1,207 @@
 package ev3dev.sensors.slamtec;
 
-import ev3dev.sensors.slamtec.model.Scan;
-import ev3dev.sensors.slamtec.model.ScanDistance;
-import ev3dev.sensors.slamtec.service.*;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
-@Slf4j class RPLidarA1Driver implements RPLidarProvider, RpLidarListener {
+import ev3dev.sensors.slamtec.model.Scan;
+import ev3dev.sensors.slamtec.model.ScanDistance;
+import ev3dev.sensors.slamtec.service.RpLidarDeviceInfo;
+import ev3dev.sensors.slamtec.service.RpLidarHeath;
+import ev3dev.sensors.slamtec.service.RpLidarListener;
+import ev3dev.sensors.slamtec.service.RpLidarLowLevelDriver;
+import ev3dev.sensors.slamtec.service.RpLidarMeasurement;
+import lombok.extern.slf4j.Slf4j;
 
-    private AtomicBoolean closingStatus;
+@Slf4j
+class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
+{
 
-    private RpLidarLowLevelDriver driver;
-    private final String USBPort;
+	private AtomicBoolean closingStatus;
 
-    private int counter = 0;
-    private boolean flag = false;
-    private List<ScanDistance> distancesTemp = Collections.synchronizedList(new ArrayList<>());
-    private Scan scan;
+	private RpLidarLowLevelDriver driver;
+	private final String USBPort;
 
-    private final List<RPLidarProviderListener> listenerList = Collections.synchronizedList(new ArrayList());
+	private volatile boolean flag = false;
+	private final List<ScanDistance> distancesTemp = Collections.synchronizedList(new ArrayList<>());
 
-    public RPLidarA1Driver(final String USBPort) {
-        this.USBPort = USBPort;
-        this.closingStatus = new AtomicBoolean(false);
-        if(log.isInfoEnabled()){
-            log.info("Starting a RPLidarA1 instance");
-        }
-    }
+	private final List<RPLidarProviderListener> listenerList = new CopyOnWriteArrayList<>();
 
-    @Override
-    public void init() throws RPLidarA1ServiceException {
+	public RPLidarA1Driver(final String USBPort)
+	{
+		this.USBPort = USBPort;
+		this.closingStatus = new AtomicBoolean(false);
+		if (log.isInfoEnabled())
+		{
+			log.info("Starting a RPLidarA1 instance");
+		}
+	}
 
-        if(log.isInfoEnabled()){
-            log.info("Connecting with: {}", this.USBPort);
-        }
-        File f = new File(this.USBPort);
-        if(!f.exists() || f.isDirectory()) {
-            log.error("This device is not valid: {}", this.USBPort);
-            throw new RPLidarA1ServiceException("This device is not valid: " + this.USBPort);
-        }
+	@Override
+	public void init() throws RPLidarA1ServiceException, InterruptedException
+	{
 
-        try {
-            driver = new RpLidarLowLevelDriver(this.USBPort, this);
-        //TODO Improve this Exception handling
-        } catch (Exception e) {
-            throw new RPLidarA1ServiceException(e);
-        }
-        closingStatus = new AtomicBoolean(false);
-        driver.setVerbose(false);
-        driver.sendReset();
+		if (log.isInfoEnabled())
+		{
+			log.info("Connecting with: {}", this.USBPort);
+		}
+		File f = new File(this.USBPort);
+		if (!f.exists() || f.isDirectory())
+		{
+			log.error("This device is not valid: {}", this.USBPort);
+			throw new RPLidarA1ServiceException("This device is not valid: " + this.USBPort);
+		}
 
-        //for v2 only - I guess this command is ignored by v1
-        driver.sendStartMotor(660);
+		try
+		{
+			driver = new RpLidarLowLevelDriver(this.USBPort, this);
+			// TODO Improve this Exception handling
+		} catch (Exception e)
+		{
+			throw new RPLidarA1ServiceException(e);
+		}
+		closingStatus = new AtomicBoolean(false);
+		driver.setVerbose(false);
+		driver.sendReset();
 
-        driver.pause(200);
-    }
+		// for v2 only - I guess this command is ignored by v1
+		// driver.sendStartMotor(660);
 
-    @Override
-    public Scan scan() throws RPLidarA1ServiceException {
+		driver.pause(200);
+	}
 
-        driver.sendScan(300);
-        driver.pause(700);
+	@Override
+	public Scan scan() throws RPLidarA1ServiceException, InterruptedException
+	{
 
-        final List<ScanDistance> distances = new ArrayList<>();
-        synchronized(distancesTemp){
-            distances.addAll(distancesTemp);
-            distancesTemp.clear();
-        }
-        distances.sort(Comparator.comparing(ScanDistance::getAngle));
-        return new Scan(Collections.unmodifiableList(distances));
-    }
+		flag = false;
+		distancesTemp.clear();
+		driver.sendScanA1();
 
-    @Override
-    public void close() throws RPLidarA1ServiceException {
-        closingStatus = new AtomicBoolean(true);
-        driver.sendStopMotor();
-        driver.shutdown();
-        driver.pause(100);
-    }
+		// the first scan is always incomplete, so wait for 2 scans
+		final CountDownLatch latch = new CountDownLatch(2);
 
-    @Override
-    public void addListener(RPLidarProviderListener listener) {
-        listenerList.add(listener);
-    }
+		final AtomicReference<Scan> distances = new AtomicReference<>();
 
-    @Override
-    public void removeListener(RPLidarProviderListener listener) {
-        listenerList.remove(listener);
-    }
+		addListener(new RPLidarProviderListener()
+		{
 
-//    @Override
-//    public void handleMeasurement(RpLidarMeasurement measurement) {
-//
-//        if(!this.closingStatus) {
-//
-//            //TODO This conversion should be incorporated in RpLidarLowLevelDriver
-//            int angle = new Double(measurement.angle / 64.0).intValue();
-//            double distance = (measurement.distance / 4.0) / 10.0;
-//
-//            if(!this.containAngle(distancesTemp, angle)){
-//                distancesTemp.add(new ScanDistance(angle, distance, measurement.quality, measurement.start));
-//            }
-//        }
-//    }
+			@Override
+			public void scanFinished(Scan scan)
+			{
 
-    @Override
-    public void handleMeasurement(final RpLidarMeasurement measurement) {
+				removeListener(this);
 
-        if(!closingStatus.get()){
+				distances.set(scan);
 
-            if(flag){
-                if(measurement.start){
-                    log.trace("{}", counter);
-                    synchronized (distancesTemp) {
-                        final List<ScanDistance> distances = new ArrayList<>();
-                        distances.addAll(distancesTemp);
-                        distancesTemp.clear();
-                        scan = new Scan(distances);
+				latch.countDown();
 
-                        for (RPLidarProviderListener listener : listenerList) {
-                            listener.scanFinished(new Scan(distances));
-                        }
+			}
+		});
 
-                    }
+		latch.await(3, TimeUnit.SECONDS);
+		return distances.get();
 
-                    counter= 0;
-                    flag=false;
-                }
-            }
+	}
 
-            if (measurement.start) {
-                flag = true;
-            }
+	@Override
+	public void continousScan() throws RPLidarA1ServiceException
+	{
+		flag = false;
+		distancesTemp.clear();
+		driver.sendScanA1();
+		log.warn("Initiated continous scanning");
+	}
 
-            if(flag){
-                counter++;
-                int angle = new Float(measurement.angle / 64.0f).intValue();
-                float distance = (measurement.distance / 4.0f) / 10.0f;
-                distancesTemp.add(new ScanDistance(angle, distance, measurement.quality, measurement.start));
-            }
-        }
+	@Override
+	public void stopScanning() throws RPLidarA1ServiceException
+	{
+		driver.sendStop();
+		log.warn("Initiated continous scanning");
+	}
 
-    }
+	@Override
+	public void close() throws RPLidarA1ServiceException
+	{
+		closingStatus = new AtomicBoolean(true);
+		// driver.sendStopMotor();
+		driver.shutdown();
+		driver.pause(100);
+	}
 
-    public boolean containAngle(final List<ScanDistance> list, final int angle){
-        return list.stream().filter(o -> o.getAngle() == angle).findFirst().isPresent();
-    }
+	@Override
+	public void addListener(RPLidarProviderListener listener)
+	{
+		listenerList.add(listener);
+	}
 
-    //Not used at the moment
+	@Override
+	public void removeListener(RPLidarProviderListener listener)
+	{
+		listenerList.remove(listener);
+	}
 
-    @Override
-    public void handleDeviceHealth(RpLidarHeath health) {
+	@Override
+	public void handleMeasurement(final RpLidarMeasurement measurement)
+	{
 
-    }
+		if (!closingStatus.get())
+		{
 
-    @Override
-    public void handleDeviceInfo(RpLidarDeviceInfo info) {
+			if (flag)
+			{
+				if (measurement.start)
+				{
+					synchronized (distancesTemp)
+					{
+						final List<ScanDistance> distances = new ArrayList<>();
+						distances.addAll(distancesTemp);
+						distancesTemp.clear();
 
-    }
+						for (RPLidarProviderListener listener : listenerList)
+						{
+							listener.scanFinished(new Scan(distances));
+						}
+
+					}
+
+					flag = false;
+				}
+			}
+
+			if (measurement.start)
+			{
+				flag = true;
+			}
+
+			if (flag)
+			{
+				int angle = new Float(measurement.angle / 64.0f).intValue();
+				float distance = (measurement.distance / 4.0f) / 10.0f;
+				distancesTemp.add(new ScanDistance(angle, distance, measurement.quality, measurement.start));
+			}
+		}
+
+	}
+
+	// Not used at the moment
+
+	@Override
+	public void handleDeviceHealth(RpLidarHeath health)
+	{
+
+	}
+
+	@Override
+	public void handleDeviceInfo(RpLidarDeviceInfo info)
+	{
+
+	}
+
 }
