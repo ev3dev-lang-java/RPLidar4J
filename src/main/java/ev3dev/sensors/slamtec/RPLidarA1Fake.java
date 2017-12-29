@@ -46,7 +46,7 @@ class RPLidarA1Fake implements RPLidarProvider
 		readThread.requestStop();
 	}
 
-	public class ReadSerialThread implements Runnable
+	private class ReadSerialThread implements Runnable
 	{
 
 		final private AtomicBoolean run;
