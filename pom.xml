@@ -34,22 +34,21 @@
 		</dependency>
 
 
-	<!-- <dependency> -->
-	<!-- <groupId>org.rxtx</groupId> -->
-	<!-- <artifactId>rxtx</artifactId> -->
-	<!-- <version>2.1.7</version> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.rxtx</groupId> -->
+		<!-- <artifactId>rxtx</artifactId> -->
+		<!-- <version>2.1.7</version> -->
 
 
 
-	<!-- </dependency> -->
-		
-		 <dependency>
-      <groupId>com.maschel</groupId>
-      <artifactId>roombajssc</artifactId>
-      <version>1.0.1</version>
-      <scope>compile</scope>
-    </dependency>
-		
+		<!-- </dependency> -->
+
+		<dependency>
+			<groupId>org.scream3r</groupId>
+			<artifactId>jssc</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
