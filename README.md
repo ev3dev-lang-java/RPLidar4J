@@ -206,11 +206,6 @@ Many Thanks Peter Abeles by the initial development:
 https://github.com/lessthanoptimal/jrplidar 
 
 
-## TODO
 
-- Improve the Design solution
-- Refactor Service layer
-- Add LeJOS Sensor support
-- Add Mock test
 
 
