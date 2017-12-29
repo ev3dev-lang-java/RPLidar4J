@@ -148,7 +148,7 @@ and deploy on your Brick using some Plugin for Maven or Gradle.
 To run the example this the command:
 
 ```
-java -Djava.library.path=/usr/lib/jni/ -jar /home/robot/RPLidar4J-all-0.4.0.jar
+java -jar /home/robot/RPLidar4J-all-0.4.0.jar
 ```
 
 
