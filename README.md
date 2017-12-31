@@ -10,6 +10,7 @@ RPLidar4J, is a Java library designed to manage the sensors [RPLidar A1 & RPLIDA
 java -jar /home/robot/RPLidar4J-all-0.4.0.jar GUI
 ```
 (Click the image to watch the video)
+
 [![Live GUI Demo](https://img.youtube.com/vi/nKdeGhDYD48/0.jpg)](https://www.youtube.com/watch?v=nKdeGhDYD48)
 
 
