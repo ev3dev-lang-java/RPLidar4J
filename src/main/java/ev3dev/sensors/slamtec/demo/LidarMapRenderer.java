@@ -1,4 +1,4 @@
-package examples;
+package ev3dev.sensors.slamtec.demo;
 
 import java.awt.Color;
 import java.awt.Graphics;

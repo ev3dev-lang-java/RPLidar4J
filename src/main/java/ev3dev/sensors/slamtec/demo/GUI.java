@@ -1,4 +1,4 @@
-package examples;
+package ev3dev.sensors.slamtec.demo;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
