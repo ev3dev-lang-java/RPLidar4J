@@ -204,7 +204,7 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 
 			if (flag)
 			{
-				int angle = new Float(measurement.angle / 64.0f).intValue();
+				float angle = new Float(measurement.angle / 64.0f);
 				float distance = (measurement.distance / 4.0f) / 10.0f;
 				distancesTemp.add(new ScanDistance(angle, distance, measurement.quality, measurement.start));
 			}
