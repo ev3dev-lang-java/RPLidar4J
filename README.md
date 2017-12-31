@@ -1,6 +1,6 @@
 # RPLidar4J
 
-RPLidar4J, is a Java library designed to manage the sensors [RPLidar A1 & RPLIDAR A2](http://www.slamtec.com/en/Lidar), a 2D LIDAR sensor in a easy way.
+RPLidar4J, is a Java library designed to manage the sensors [RPLidar A1 & RPLIDAR A2](http://www.slamtec.com/en/Lidar), a 2D LIDAR sensor in an easy way.
 
 [![Dependency Status](https://www.versioneye.com/user/projects/59046737e57fd5003857a94f/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/59046737e57fd5003857a94f)
 

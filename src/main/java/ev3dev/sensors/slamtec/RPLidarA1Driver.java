@@ -98,6 +98,12 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 	}
 
 	@Override
+	public Scan scan() throws RPLidarA1ServiceException, InterruptedException
+	{
+		return oneShotScan();
+	}
+
+	@Override
 	public Scan oneShotScan() throws RPLidarA1ServiceException, InterruptedException
 	{
 

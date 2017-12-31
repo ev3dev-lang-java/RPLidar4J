@@ -9,6 +9,16 @@ public interface RPLidarProvider
 
 	void init() throws RPLidarA1ServiceException, InterruptedException;
 
+	/**
+	 * use oneShotScan() instead
+	 * 
+	 * @return
+	 * @throws RPLidarA1ServiceException
+	 * @throws InterruptedException
+	 */
+	@Deprecated
+	Scan scan() throws RPLidarA1ServiceException, InterruptedException;
+
 	Scan oneShotScan() throws RPLidarA1ServiceException, InterruptedException;
 
 	void continuousScanning() throws RPLidarA1ServiceException;

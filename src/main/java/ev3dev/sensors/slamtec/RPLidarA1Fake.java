@@ -30,6 +30,12 @@ class RPLidarA1Fake implements RPLidarProvider
 	}
 
 	@Override
+	public Scan scan() throws RPLidarA1ServiceException, InterruptedException
+	{
+		return oneShotScan();
+	}
+
+	@Override
 	public Scan oneShotScan() throws RPLidarA1ServiceException
 	{
 		final List<ScanDistance> distances = Collections.synchronizedList(new ArrayList<>());
@@ -146,4 +152,5 @@ class RPLidarA1Fake implements RPLidarProvider
 		throw new RuntimeException("Not Implemented");
 
 	}
+
 }

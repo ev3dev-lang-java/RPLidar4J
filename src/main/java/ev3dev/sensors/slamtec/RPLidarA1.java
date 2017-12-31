@@ -24,6 +24,12 @@ public class RPLidarA1 implements RPLidarProvider
 	}
 
 	@Override
+	public Scan scan() throws RPLidarA1ServiceException, InterruptedException
+	{
+		return oneShotScan();
+	}
+
+	@Override
 	public Scan oneShotScan() throws RPLidarA1ServiceException, InterruptedException
 	{
 		return rpLidarProvider.oneShotScan();
