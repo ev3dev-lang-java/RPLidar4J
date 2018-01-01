@@ -66,4 +66,10 @@ public class RPLidarA1 implements RPLidarProvider
 		rpLidarProvider.stopScanning();
 
 	}
+
+	@Override
+	public Scan getNextScan() throws RPLidarA1ServiceException, InterruptedException
+	{
+		return rpLidarProvider.getNextScan();
+	}
 }

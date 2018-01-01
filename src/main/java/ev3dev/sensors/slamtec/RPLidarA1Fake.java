@@ -153,4 +153,10 @@ class RPLidarA1Fake implements RPLidarProvider
 
 	}
 
+	@Override
+	public Scan getNextScan() throws RPLidarA1ServiceException
+	{
+		return oneShotScan();
+	}
+
 }

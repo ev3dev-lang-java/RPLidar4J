@@ -235,4 +235,33 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 		}
 	}
 
+	@Override
+	public Scan getNextScan() throws RPLidarA1ServiceException, InterruptedException
+	{
+		final CountDownLatch latch = new CountDownLatch(1);
+		AtomicReference<Scan> ret = new AtomicReference<>();
+
+		RPLidarProviderListener listener = new RPLidarProviderListener()
+		{
+
+			@Override
+			public void scanFinished(Scan scan)
+			{
+				ret.set(scan);
+				latch.countDown();
+			}
+
+			@Override
+			public void deviceInfo(RpLidarDeviceInfo info)
+			{
+
+			}
+		};
+		addListener(listener);
+
+		latch.await(5, TimeUnit.SECONDS);
+		removeListener(listener);
+		return ret.get();
+	}
+
 }
