@@ -10,7 +10,7 @@ RPLidar4J, is a Java library designed to manage the sensors [RPLidar A1 & RPLIDA
 ```
 mvn install
 cd target
-java -cp RPLidar4J-0.0.1-SNAPSHOT.jar:lib/* ev3dev.sensors.slamtec.demo.GUI
+java -cp RPLidar4J-0.8.0.jar:lib/* ev3dev.sensors.slamtec.demo.GUI
 ```
 (Click the image to watch the video)
 
@@ -92,9 +92,9 @@ To use this project, import the library as a Maven dependency.
 
 ```
 <dependency>
-    <groupId>com.github.ev3dev-lang-java</groupId>
+    <groupId>RPLidar4J</groupId>
     <artifactId>RPLidar4J</artifactId>
-    <version>0.4.0</version>
+    <version>0.8.0</version>
 </dependency>
 ```
 
@@ -165,7 +165,9 @@ and deploy on your Brick using some Plugin for Maven or Gradle.
 To run the example this the command:
 
 ```
-java -jar /home/robot/RPLidar4J-all-0.4.0.jar
+mvn install
+cd target
+java -cp RPLidar4J-0.8.0.jar:lib/* examples.Continous
 ```
 
 
