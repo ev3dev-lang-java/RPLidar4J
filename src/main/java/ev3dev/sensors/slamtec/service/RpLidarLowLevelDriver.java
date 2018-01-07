@@ -544,42 +544,49 @@ public @Slf4j class RpLidarLowLevelDriver implements SerialPortEventListener
 
 			byte[] ldata = serialPort.readBytes();
 
-			// log.warn("bytes received " + ldata.length + " prepending " +
-			// lastData.length);
-
-			// concatenate the left over data from the previous parse with the
-			// new incoming data into a new buffer
-			int lastLength = lastData.length;
-			int dataLength = ldata.length;
-			size = lastLength + dataLength;
-			byte[] data = new byte[size];
-
-			for (int i = 0; i < size; i++)
+			if (ldata != null)
 			{
-				if (i < lastLength)
-				{
-					data[i] = lastData[i];
-				} else
-				{
-					data[i] = ldata[i - lastLength];
-				}
-			}
+				// log.warn("bytes received " + ldata.length + " prepending " +
+				// lastData.length);
 
-			// parse the buffer
-			int lastsize = 0;
-			while (size > 0 && size != lastsize)
-			{
-				int used = parseData(data, size);
-				// log.warn(size + " - " + used);
-				lastData = new byte[size - used];
-				// shift the buffer over by the amount read
-				for (int i = 0; i < size - used; i++)
+				// concatenate the left over data from the previous parse with
+				// the
+				// new incoming data into a new buffer
+				int lastLength = lastData.length;
+				int dataLength = ldata.length;
+				size = lastLength + dataLength;
+				byte[] data = new byte[size];
+
+				for (int i = 0; i < size; i++)
 				{
-					data[i] = data[i + used];
-					lastData[i] = data[i];
+					if (i < lastLength)
+					{
+						data[i] = lastData[i];
+					} else
+					{
+						data[i] = ldata[i - lastLength];
+					}
 				}
-				lastsize = size;
-				size -= used;
+
+				// parse the buffer
+				int lastsize = 0;
+				while (size > 0 && size != lastsize)
+				{
+					int used = parseData(data, size);
+					// log.warn(size + " - " + used);
+					lastData = new byte[size - used];
+					// shift the buffer over by the amount read
+					for (int i = 0; i < size - used; i++)
+					{
+						data[i] = data[i + used];
+						lastData[i] = data[i];
+					}
+					lastsize = size;
+					size -= used;
+				}
+			} else
+			{
+				log.warn("Empty serial event");
 			}
 
 		} catch (Exception e)

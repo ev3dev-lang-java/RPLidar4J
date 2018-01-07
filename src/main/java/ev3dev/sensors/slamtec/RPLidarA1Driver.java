@@ -259,7 +259,10 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 		};
 		addListener(listener);
 
-		latch.await(5, TimeUnit.SECONDS);
+		if (!latch.await(5, TimeUnit.SECONDS))
+		{
+			log.warn("Failed to get a scan");
+		}
 		removeListener(listener);
 		return ret.get();
 	}
