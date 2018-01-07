@@ -70,7 +70,6 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 		driver.sendReset();
 
 		driver.sendStartMotor(660);
-		driver.sendGetInfo();
 
 		final CountDownLatch latch = new CountDownLatch(1);
 
@@ -91,6 +90,8 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 			}
 		};
 		addListener(listener);
+
+		driver.sendGetInfo();
 
 		latch.await(5, TimeUnit.SECONDS);
 		removeListener(listener);
