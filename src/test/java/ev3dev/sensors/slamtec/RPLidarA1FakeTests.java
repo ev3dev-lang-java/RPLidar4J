@@ -1,41 +1,43 @@
 package ev3dev.sensors.slamtec;
 
-import ev3dev.sensors.slamtec.model.Scan;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
-public @Slf4j class RPLidarA1FakeTests {
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import ev3dev.sensors.slamtec.model.Scan;
+
+public class RPLidarA1FakeTests
+{
 
 	@BeforeClass
-	public static void runOnceBeforeClass() {
+	public static void runOnceBeforeClass()
+	{
 		System.setProperty("FAKE_RPLIDARA1", "true");
 	}
 
 	@Test
-	public void getDistanceStreamTest() throws Exception {
+	public void getDistanceStreamTest() throws Exception
+	{
 
 		final String USBPort = "ttyUSB0";
 		final RPLidarA1 lidar = new RPLidarA1(USBPort);
 		lidar.init();
-		lidar.scan().getDistances()
-			.stream()
-			.forEach(System.out::println);
+		lidar.oneShotScan().getDistances().stream().forEach(System.out::println);
 		lidar.close();
 	}
 
 	@Test
-	public void return360DistanceTest() throws Exception {
+	public void return360DistanceTest() throws Exception
+	{
 
 		final String USBPort = "ttyUSB0";
 		final RPLidarA1 lidar = new RPLidarA1(USBPort);
 		lidar.init();
-		final Scan scan = lidar.scan();
+		final Scan scan = lidar.oneShotScan();
 		lidar.close();
 
 		assertThat(scan, is(notNullValue()));

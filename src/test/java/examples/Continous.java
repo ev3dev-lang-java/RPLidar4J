@@ -1,12 +1,14 @@
 package examples;
 
+import java.util.concurrent.CountDownLatch;
+
 import ev3dev.sensors.slamtec.RPLidarA1;
 import ev3dev.sensors.slamtec.RPLidarProviderListener;
 import ev3dev.sensors.slamtec.model.Scan;
 import ev3dev.sensors.slamtec.service.RpLidarDeviceInfo;
 import lombok.extern.slf4j.Slf4j;
 
-public @Slf4j class Demo3
+public @Slf4j class Continous
 {
 
 	public static void main(String[] args) throws Exception
@@ -16,17 +18,21 @@ public @Slf4j class Demo3
 		final String USBPort = "/dev/ttyUSB0";
 		final RPLidarA1 lidar = new RPLidarA1(USBPort);
 		lidar.init();
+
+		final CountDownLatch latch = new CountDownLatch(30);
+
+		lidar.continuousScanning();
+
 		lidar.addListener(new RPLidarProviderListener()
 		{
+
 			@Override
 			public void scanFinished(Scan scan)
 			{
-				// log.info("Iteration: {}, Measures: {}",
-				// counter.incrementAndGet(), scan.getDistances().size());
-				log.info("Measures: {}", scan.getDistances().size());
-				scan.getDistances().stream().filter((measure) -> measure.getQuality() > 10)
-						.filter((measure) -> (measure.getAngle() >= 345 || measure.getAngle() <= 15))
-						.filter((measure) -> measure.getDistance() <= 50).forEach(System.out::println);
+				final long counter = scan.getDistances().stream().count();
+				log.info(" Measures: {}", counter);
+				latch.countDown();
+
 			}
 
 			@Override
@@ -34,13 +40,11 @@ public @Slf4j class Demo3
 			{
 			}
 		});
-		for (int x = 0; x <= 10; x++)
-		{
-			lidar.oneShotScan();
-		}
+
+		latch.await();
+
 		lidar.close();
-		log.info("End");
+		log.info("End demo");
 		System.exit(0);
 	}
-
 }

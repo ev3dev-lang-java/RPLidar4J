@@ -1,9 +1,5 @@
 package ev3dev.sensors.slamtec;
 
-import ev3dev.sensors.slamtec.model.Scan;
-import ev3dev.sensors.slamtec.model.ScanDistance;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,97 +7,156 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Slf4j class RPLidarA1Fake implements RPLidarProvider {
+import ev3dev.sensors.slamtec.model.Scan;
+import ev3dev.sensors.slamtec.model.ScanDistance;
+import lombok.extern.slf4j.Slf4j;
 
-    public RPLidarA1Fake(final String USBPort){
-        readThread = new ReadSerialThread();
-        log.trace("Starting a Fake RPLidarA1 Object");
-    }
+@Slf4j
+class RPLidarA1Fake implements RPLidarProvider
+{
 
-    private ReadSerialThread readThread;
+	public RPLidarA1Fake(final String USBPort)
+	{
+		readThread = new ReadSerialThread();
+		log.trace("Starting a Fake RPLidarA1 Object");
+	}
 
-    @Override
-    public void init() throws RPLidarA1ServiceException {
-        new Thread(readThread).start();
-    }
+	private ReadSerialThread readThread;
 
-    @Override
-    public Scan scan() throws RPLidarA1ServiceException {
-        final List<ScanDistance> distances = Collections.synchronizedList(new ArrayList<>());
-        for(int angle = 0; angle < 360; angle++){
-            distances.add(new ScanDistance(angle, new Float(Math.random() * 4000 + 1), 1, false));
-        }
-        return new Scan(distances);
-    }
+	@Override
+	public void init() throws RPLidarA1ServiceException
+	{
+		new Thread(readThread).start();
+	}
 
-    @Override
-    public void close() throws RPLidarA1ServiceException {
-        readThread.requestStop();
-    }
+	@Override
+	public Scan scan() throws RPLidarA1ServiceException, InterruptedException
+	{
+		return oneShotScan();
+	}
 
-    public class ReadSerialThread implements Runnable {
+	@Override
+	public Scan oneShotScan() throws RPLidarA1ServiceException
+	{
+		final List<ScanDistance> distances = Collections.synchronizedList(new ArrayList<>());
+		for (int angle = 0; angle < 360; angle++)
+		{
+			distances.add(new ScanDistance(angle, new Float(Math.random() * 4000 + 1), 1, false));
+		}
+		return new Scan(distances);
+	}
 
-        final private AtomicBoolean run;
-        final private AtomicInteger counter;
+	@Override
+	public void close() throws RPLidarA1ServiceException
+	{
+		readThread.requestStop();
+	}
 
-        private final List<RPLidarProviderListener> listenerList = Collections.synchronizedList(new ArrayList());
+	private class ReadSerialThread implements Runnable
+	{
 
-        ReadSerialThread(){
-            run = new AtomicBoolean(true);
-            counter = new AtomicInteger(0);
-        }
+		final private AtomicBoolean run;
+		final private AtomicInteger counter;
 
-        public void addListener(final RPLidarProviderListener listener) {
-            synchronized (listenerList){
-                listenerList.add(listener);
-            }
-        }
+		private final List<RPLidarProviderListener> listenerList = Collections.synchronizedList(new ArrayList<>());
 
-        public void removeListener(final RPLidarProviderListener listener){
-            synchronized (listenerList){
-                listenerList.remove(listener);
-            }
-        }
+		ReadSerialThread()
+		{
+			run = new AtomicBoolean(true);
+			counter = new AtomicInteger(0);
+		}
 
-        public void requestStop() {
-            run.getAndSet(true);
-        }
+		public void addListener(final RPLidarProviderListener listener)
+		{
+			synchronized (listenerList)
+			{
+				listenerList.add(listener);
+			}
+		}
 
-        @Override
-        public void run() {
+		public void removeListener(final RPLidarProviderListener listener)
+		{
+			synchronized (listenerList)
+			{
+				listenerList.remove(listener);
+			}
+		}
 
-            while(run.get()){
-                counter.incrementAndGet();
-                if(counter.get() > 50){
+		public void requestStop()
+		{
+			run.getAndSet(true);
+		}
 
-                    synchronized (listenerList) {
-                        for (RPLidarProviderListener listener : listenerList) {
-                            try {
-                                listener.scanFinished(scan());
-                            } catch (RPLidarA1ServiceException e) {
-                                log.error(e.getLocalizedMessage());
-                                e.printStackTrace();
-                            }
-                        }
-                    }
+		@Override
+		public void run()
+		{
 
-                    counter.getAndSet(0);
-                    log.info("Detected start flag");
-                }
+			while (run.get())
+			{
+				counter.incrementAndGet();
+				if (counter.get() > 50)
+				{
 
-                try { TimeUnit.MILLISECONDS.sleep(5); } catch (InterruptedException e) {}
-            }
+					synchronized (listenerList)
+					{
+						for (RPLidarProviderListener listener : listenerList)
+						{
+							try
+							{
+								listener.scanFinished(oneShotScan());
+							} catch (RPLidarA1ServiceException e)
+							{
+								log.error(e.getLocalizedMessage());
+								e.printStackTrace();
+							}
+						}
+					}
 
-        }
-    }
+					counter.getAndSet(0);
+					log.info("Detected start flag");
+				}
 
-    @Override
-    public void addListener(RPLidarProviderListener listener) {
-        readThread.addListener(listener);
-    }
+				try
+				{
+					TimeUnit.MILLISECONDS.sleep(5);
+				} catch (InterruptedException e)
+				{
+				}
+			}
 
-    @Override
-    public void removeListener(RPLidarProviderListener listener) {
-        readThread.removeListener(listener);
-    }
+		}
+	}
+
+	@Override
+	public void addListener(RPLidarProviderListener listener)
+	{
+		readThread.addListener(listener);
+	}
+
+	@Override
+	public void removeListener(RPLidarProviderListener listener)
+	{
+		readThread.removeListener(listener);
+	}
+
+	@Override
+	public void continuousScanning() throws RPLidarA1ServiceException
+	{
+		throw new RuntimeException("Not Implemented");
+
+	}
+
+	@Override
+	public void stopScanning() throws RPLidarA1ServiceException
+	{
+		throw new RuntimeException("Not Implemented");
+
+	}
+
+	@Override
+	public Scan getNextScan() throws RPLidarA1ServiceException
+	{
+		return oneShotScan();
+	}
+
 }
