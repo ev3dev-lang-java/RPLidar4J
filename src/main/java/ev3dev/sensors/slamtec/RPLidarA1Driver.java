@@ -93,7 +93,13 @@ class RPLidarA1Driver implements RPLidarProvider, RpLidarListener
 
 		driver.sendGetInfo();
 
-		latch.await(5, TimeUnit.SECONDS);
+		if (!latch.await(5, TimeUnit.SECONDS))
+		{
+			log.error("Failed to start scanner, retrying init()");
+			driver.shutdown();
+			TimeUnit.MILLISECONDS.sleep(500);
+			init();
+		}
 		removeListener(listener);
 
 	}
