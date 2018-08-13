@@ -5,17 +5,16 @@ import lombok.Value;
 /**
  * Scan distances store information about:
  *
- * - angle measured
- * - distance from the object
- * - quality of the measure
- * - start flag
+ * - angle measured - distance from the object - quality of the measure - start
+ * flag
  *
  */
 @Value
-public class ScanDistance {
+public class ScanDistance
+{
 
-    private final int angle;
-    private final float distance;
-    private final int quality;
-    private final boolean start;
+	private final double angle;
+	private final float distance;
+	private final int quality;
+	private final boolean start;
 }
